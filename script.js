@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (userConfirmed) {
                 // Redirect to Google Form in new tab
-                window.open('https://forms.gle/snu1guAPRXVSWnGr6', '_blank');
+                window.open('https://forms.gle/mfDjfJX7bUUpaCKn8', '_blank');
                 
                 // Show a follow-up message
                 setTimeout(() => {
