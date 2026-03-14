@@ -249,67 +249,84 @@
                 </div>
 
                 <div class="registration-action">
-                    <div class="action-card">
-                        <div class="action-icon">
-                            <i class="fas fa-user-plus"></i>
-                        </div>
-                        <h3>Ready to Join?</h3>
-                        <p>Click the button below to register through our official Google Form. Remember to use your
-                            KIIT email address.</p>
+    <div class="action-card">
+        <div class="action-icon">
+            <i class="fas fa-user-plus"></i>
+        </div>
+        <h3>Ready to Join?</h3>
+        <p>Click the button below to register through our official Google Form. Remember to use your
+            KIIT email address.</p>
 
-                        <p>Please wait for the activation link. Kindly keep an eye on this section for updates.</p>
+        <!-- Countdown Timer -->
+        <h4 id="countdownTimer" style="margin:15px 0; font-size:20px; color:#ff4d4d;">
+            Registration closes in: <span id="timer"></span>
+        </h4>
 
-
-
-
-
-
-
-                        <!-- here is registration link -->
-                        <button id="registerBtn" class="btn btn-primary btn-large">
-                            <i class="fas fa-pencil-alt"></i> Register Now
-                        </button>
-
-
-
-                        <!-- <style>
-                            .action-note {
-                                display: flex;
-                                align-items: flex-start;
-                                background-color: #fff3cd;
-                                /* light yellow background */
-                                border-left: 5px solid #ffc107;
-                                /* yellow accent */
-                                color: #856404;
-                                /* dark yellow text */
-                                padding: 15px 20px;
-                                border-radius: 5px;
-                                font-family: Arial, sans-serif;
-                                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-                                margin: 20px 0;
-                            }
-
-                            .action-note i {
-                                font-size: 20px;
-                                margin-right: 12px;
-                                margin-top: 2px;
-                            }
-                        </style>
-
-                        <p class="action-note">
-                            <i class="fas fa-clock"></i>
-                            We apologize for the delay in the registration process. Due to some unforeseen technical
-                            issues, registration will be opening a little later than planned. We are working to resolve
-                            the issue and truly appreciate your patience and understanding.
-                            <br>Thank you for your cooperation.
-                        </p> -->
+        <!-- here is registration link -->
+        <button id="registerBtn" class="btn btn-primary btn-large">
+            <i class="fas fa-pencil-alt"></i> Register Now
+        </button>
 
 
 
 
-                        
-                    </div>
-                </div>
+
+        <!-- <style>
+            .action-note {
+                display: flex;
+                align-items: flex-start;
+                background-color: #fff3cd;
+                border-left: 5px solid #ffc107;
+                color: #856404;
+                padding: 15px 20px;
+                border-radius: 5px;
+                font-family: Arial, sans-serif;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+                margin: 20px 0;
+            }
+
+            .action-note i {
+                font-size: 20px;
+                margin-right: 12px;
+                margin-top: 2px;
+            }
+        </style>
+
+        <p class="action-note">
+            <i class="fas fa-clock"></i>
+            We apologize for the delay in the registration process. Due to some unforeseen technical
+            issues, registration will be opening a little later than planned. We are working to resolve
+            the issue and truly appreciate your patience and understanding.
+            <br>Thank you for your cooperation.
+        </p> -->
+
+    </div>
+</div>
+
+<script>
+const targetTime = new Date("March 14, 2026 23:59:00").getTime();
+const timerElement = document.getElementById("timer");
+const btn = document.getElementById("registerBtn");
+const timerTitle = document.getElementById("countdownTimer");
+
+const countdown = setInterval(function () {
+    const now = new Date().getTime();
+    const distance = targetTime - now;
+
+    if (distance <= 0) {
+        clearInterval(countdown);
+        timerTitle.innerHTML = "❌ Registration Closed";
+        btn.style.display = "none";
+        return;
+    }
+
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    timerElement.innerHTML = hours + "h " + minutes + "m " + seconds + "s ";
+}, 1000);
+</script></div>
             </div>
         </div>
     </section>
