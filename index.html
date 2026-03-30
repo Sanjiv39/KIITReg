@@ -4,35 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KIIT Koding Club </title>
+    <title>K{devs} | Coding Club</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Slab:wght@400;500;700&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
-    <link rel="icon" type="image/x-icon"
-        href="https://f1000research-files.f1000.com/thumbnails/1fd5d5a9-20f0-4670-adfa-0e49fcbaa58e_collection.thumbnail">
 </head>
 
 <body>
-    <!-- Header / Navbar -->
     <header class="header">
         <div class="container">
             <nav class="navbar">
-                <div class="logo">
-                    <div class="logo-img">
-                        <img src="https://images.hindi.news18.com/ibnkhabar/uploads/2019/04/KIIT.png" alt="KIIT Logo"
-                            class="kiit-logo">
-                        <i class="fas fa-code"></i>
+                <a href="#home" class="logo">
+                    <div class="logo-img" style="background: transparent; border: none; padding: 0;">
+                        <img src="Kdevs.png" alt="K{devs} Logo" style="height: 45px; width: auto; object-fit: contain;">
                     </div>
-                    <h1>KIIT <span>Koding Club</span></h1>
-                </div>
+                    <h1>K<span>{devs}</span></h1>
+                </a>
                 <ul class="nav-links">
                     <li><a href="#home" class="active">Home</a></li>
                     <li><a href="#about">About</a></li>
+                    <li><a href="#impact">Impact</a></li>
                     <li><a href="#registration">Registration</a></li>
                     <li><a href="#contact">Contact</a></li>
-                    <li><a href="https://kiitkodingclub.pythonanywhere.com/">Real world</li>
+                    <!-- <li><a href="https://kiitkodingclub.pythonanywhere.com/" target="_blank">Real World</a></li> -->
                 </ul>
                 <div class="menu-toggle">
                     <i class="fas fa-bars"></i>
@@ -41,54 +36,38 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
     <section id="home" class="hero">
-        <div class="container">
+        <div class="container hero-container">
             <div class="hero-content">
-                <div class="kiit-badge">
-                    <img src="https://images.hindi.news18.com/ibnkhabar/uploads/2019/04/KIIT.png" alt="KIIT Logo">
-                    <span>Official KIIT - Koding Club (School of Computer Application) </span>
+                <div class="badge">
+                    <i class="fas fa-code-branch"></i>
+                    <span>Est. 2026 • Official Tech Community</span>
                 </div>
-                <h1 class="hero-title">Join <span>KIIT Koding Club</span></h1>
-                <p class="hero-subtitle">Hackathons • Innovation • Coding • Tech Community</p>
-                <p class="hero-description">Connect with fellow developers, participate in exciting competitions, and
-                    enhance your programming skills with India's premier college coding community.</p>
+                <h1 class="hero-title">From cursor to <span>creator.</span></h1>
+                <p class="hero-description">We don't just teach syntax; we build builders. Join a community of
+                    problem-solvers bridging the gap between writing your first line of code and architecting real-world
+                    solutions.</p>
                 <div class="hero-buttons">
-                    <a href="#registration" class="btn btn-primary">Registration </a>
-                    <a href="#about" class="btn btn-secondary">Learn More</a>
-                </div>
-                <div class="hero-stats">
-                    <div class="stat-item">
-                        <i class="fas fa-users"></i>
-                        <span>Quizes</span>
-                    </div>
-                    <div class="stat-item">
-                        <i class="fas fa-trophy"></i>
-                        <span>Hackathons</span>
-                    </div>
-                    <div class="stat-item">
-                        <i class="fas fa-code"></i>
-                        <span>Projects</span>
-                    </div>
+                    <a href="#registration" class="btn btn-primary">Compile Your Future</a>
+                    <a href="https://kiitkodingclub.pythonanywhere.com/" class="btn btn-secondary">Explore Events -></a>
                 </div>
             </div>
-            <div class="hero-image">
-                <div class="code-editor">
-                    <div class="editor-header">
+            <div class="hero-visual">
+                <div class="code-window">
+                    <div class="window-header">
                         <span class="dot red"></span>
                         <span class="dot yellow"></span>
                         <span class="dot green"></span>
-                        <span class="editor-title">Koding-club.js</span>
+                        <span class="title">k_devs_init.py</span>
                     </div>
-                    <div class="editor-content">
+                    <div class="window-body">
                         <code>
-                            <span class="comment">// Join the Koding revolution</span><br>
-                            <span class="keyword">const</span> club = <span class="string">"KIIT Koding Club"</span>;<br>
-                            <span class="keyword">let</span> skills = [<span class="string">"Web Dev"</span>, <span class="string">"AI/ML"</span>, <span class="string">"Cybersecurity"</span>];<br>
-                            <span class="keyword">function</span> <span class="function">joinCommunity</span>() {<br>
-                            &nbsp;&nbsp;<span class="keyword">return</span> <span class="string">"Unlock your potential"</span>;<br>
-                            }<br>
-                            <span class="comment">// Hackathons • Workshops • Networking</span>
+                            <span class="keyword">class</span> <span class="class-name">Developer</span>:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">def</span> <span class="function">__init__</span>(self, passion):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.skills = [<span class="string">"Logic"</span>, <span class="string">"Design"</span>]<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.community = <span class="string">"K{devs}"</span><br><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">def</span> <span class="function">build</span>(self):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <span class="string">"Innovation unlocked"</span><br>
                         </code>
                     </div>
                 </div>
@@ -96,152 +75,111 @@
         </div>
     </section>
 
-    <!-- About Section -->
     <section id="about" class="about">
         <div class="container">
-            <h2 class="section-title">About <span>KIIT Koding Club</span></h2>
+            <h2 class="section-title">About <span>K{devs}</span></h2>
             <p class="section-subtitle">Empowering the next generation of developers, innovators, and tech leaders</p>
 
             <div class="about-cards">
                 <div class="about-card">
-                    <div class="card-icon">
-                        <i class="fas fa-laptop-code"></i>
-                    </div>
+                    <div class="card-icon"><i class="fas fa-laptop-code"></i></div>
                     <h3>Technical Workshops</h3>
-                    <p>Regular hands-on sessions on trending technologies like React, Node.js, Python, ML, Blockchain,
-                        and more. Learn from industry experts and senior developers.</p>
+                    <p>Regular hands-on sessions on modern tech stacks, algorithmic thinking, data structures, and
+                        system design. Learn past the tutorials.</p>
                 </div>
-
                 <div class="about-card">
-                    <div class="card-icon">
-                        <i class="fas fa-trophy"></i>
-                    </div>
-                    <h3>Hackathons & Competitions</h3>
-                    <p>Participate in national and international Koding competitions. Our members have won prestigious
-                        hackathons like Smart India Hackathon, Google Code-in, and more.</p>
+                    <div class="card-icon"><i class="fas fa-trophy"></i></div>
+                    <h3>Collaborative Sprints</h3>
+                    <p>Participate in agile team environments and hackathons. Enclose your ideas in brackets and compile
+                        them into reality with fellow members.</p>
                 </div>
-
                 <div class="about-card">
-                    <div class="card-icon">
-                        <i class="fas fa-network-wired"></i>
-                    </div>
+                    <div class="card-icon"><i class="fas fa-network-wired"></i></div>
                     <h3>Networking Opportunities</h3>
-                    <p>Connect with alumni working at top tech companies like Google, Microsoft, Amazon, and startups.
-                        Get mentorship and career guidance.</p>
+                    <p>Connect with peers, alumni, and industry professionals. Build a network that supports your
+                        transition from student to software engineer.</p>
                 </div>
-
                 <div class="about-card">
-                    <div class="card-icon">
-                        <i class="fas fa-project-diagram"></i>
-                    </div>
+                    <div class="card-icon"><i class="fas fa-project-diagram"></i></div>
                     <h3>Real-world Projects</h3>
-                    <p>Collaborate on open-source projects, build startups, and contribute to community initiatives.
-                        Gain practical experience beyond academics.</p>
+                    <p>Transition from consumers to active contributors. We partner to build digital solutions that
+                        address actual community needs.</p>
                 </div>
-
                 <div class="about-card">
-                    <div class="card-icon">
-                        <i class="fas fa-chalkboard-teacher"></i>
-                    </div>
-                    <h3>Peer Learning</h3>
-                    <p>Join study groups, Koding circles, and peer-to-peer mentoring programs. Collective learning
-                        accelerates skill development.</p>
+                    <div class="card-icon"><i class="fas fa-bug"></i></div>
+                    <h3>Peer Debugging</h3>
+                    <p>Foster a culture where no one codes in isolation. Whether tracing a logic error or optimizing a
+                        query, our community is your stack-trace.</p>
                 </div>
-
                 <div class="about-card">
-                    <div class="card-icon">
-                        <i class="fas fa-briefcase"></i>
-                    </div>
-                    <h3>Career Support</h3>
-                    <p>Resume reviews, interview preparation, internship opportunities, and placement guidance
-                        specifically for tech roles.</p>
+                    <div class="card-icon"><i class="fas fa-user-secret"></i></div>
+                    <h3>Cybersecurity & Beyond</h3>
+                    <p>Expand your horizons beyond standard dev. Explore ethical hacking, defend against SQL injections,
+                        and understand brute-force mitigation.</p>
                 </div>
             </div>
-
-            <style>
-                .about-stats {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-                    gap: 20px;
-                    padding: 30px;
-                }
-
-                .stat {
-                    background: #ffffff;
-                    border-radius: 14px;
-                    padding: 25px 20px;
-                    text-align: center;
-                    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-                    transition: transform 0.3s ease, box-shadow 0.3s ease;
-                }
-
-                .stat:hover {
-                    transform: translateY(-6px);
-                    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.15);
-                }
-
-                .stat h3 {
-                    font-size: 1.4rem;
-                    margin-bottom: 10px;
-                    color: #1f2937;
-                }
-
-                .stat p {
-                    font-size: 0.95rem;
-                    color: #4b5563;
-                    line-height: 1.6;
-                }
-            </style>
-
-            <div class="about-stats">
-                <div class="stat">
-                    <h3>🚀 Hackathons</h3>
-                    <p>We will organize innovative hackathons to encourage creativity and teamwork.</p>
-                </div>
-
-                <div class="stat">
-                    <h3>🎯 Workshops</h3>
-                    <p>We will conduct hands-on workshops focused on practical learning.</p>
-                </div>
-
-                <div class="stat">
-                    <h3>💡 Projects</h3>
-                    <p>We will build real-world projects to gain industry-level experience.</p>
-                </div>
-            </div>
-
         </div>
     </section>
 
-    <!-- Registration Section -->
+    <section id="impact" class="impact">
+        <div class="container">
+            <h2 class="section-title">Real-World <span>Impact</span></h2>
+            <p class="section-subtitle">Enclosing our ideas in brackets and compiling them into reality.</p>
+
+            <div class="impact-cards">
+                <div class="impact-card">
+                    <div class="emoji-icon">🚀</div>
+                    <h3>Hackathons</h3>
+                    <p>We will organize innovative hackathons to encourage creativity and teamwork.</p>
+                </div>
+                <div class="impact-card">
+                    <div class="emoji-icon">🎯</div>
+                    <h3>Workshops</h3>
+                    <p>We will conduct hands-on workshops focused on practical learning.</p>
+                </div>
+                <div class="impact-card">
+                    <div class="emoji-icon">💡</div>
+                    <h3>Projects</h3>
+                    <p>We will build real-world projects to gain industry-level experience.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="registration" class="registration">
         <div class="container">
-            <h2 class="section-title">Club <span>Registration</span></h2>
-            <p class="section-subtitle">Become an official member of KIIT Koding Club</p>
+            <h2 class="section-title">Register <span>Now.</span></h2>
+            <p class="section-subtitle">Become an official member of K{devs}</p>
 
-            <div class="registration-container">
-                <div class="registration-info">
-                    <h3>Registration Process</h3>
-                    <ul class="process-list">
-                        <li><i class="fas fa-check-circle"></i> Fill the official registration form</li>
-                        <li><i class="fas fa-check-circle"></i> Use your KIIT email ID only</li>
-                        <li><i class="fas fa-check-circle"></i> Verify your details before submission</li>
-                        <li><i class="fas fa-check-circle"></i> Receive confirmation within 48 hours</li>
-                        <li><i class="fas fa-check-circle"></i> Attend orientation session</li>
+            <div class="registration-layout">
+                <div class="registration-process">
+                    <h3 class="column-title">Registration Process</h3>
+
+                    <ul class="process-steps">
+                        <li class="step-item">
+                            <i class="fas fa-check-circle"></i> Fill the official registration form
+                        </li>
+                        <li class="step-item">
+                            <i class="fas fa-check-circle"></i> Use your university email ID only
+                        </li>
+                        <li class="step-item">
+                            <i class="fas fa-check-circle"></i> Verify your details before submission
+                        </li>
+                        <li class="step-item">
+                            <i class="fas fa-check-circle"></i> Receive confirmation within 48 hours
+                        </li>
+                        <li class="step-item">
+                            <i class="fas fa-check-circle"></i> Attend orientation session
+                        </li>
                     </ul>
 
-                    <div class="warning-box">
-                        <div class="warning-header">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <h4>Important Instructions</h4>
-                        </div>
-                        <p class="warning-text">
-                            ⚠️ "Please register ONLY using your KIIT Email ID.
-                            Ensure all information is correct. Incorrect details may lead to rejection."
-                        </p>
+                    <div class="info-box warning-box">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Important Instructions</h4>
+                        <p>"Please register ONLY using your official Email ID. Ensure all information is correct.
+                            Incorrect details may lead to rejection."</p>
                     </div>
 
-                    <div class="benefits-box">
+                    <div class="info-box benefits-box">
                         <h4><i class="fas fa-star"></i> Membership Benefits</h4>
                         <p>Access to all workshops, priority for hackathons, club merchandise, networking events, and
                             official certification.</p>
@@ -249,87 +187,71 @@
                 </div>
 
                 <div class="registration-action">
-    <div class="action-card">
-        <div class="action-icon">
-            <i class="fas fa-user-plus"></i>
-        </div>
-        <h3>Ready to Join?</h3>
-        <p>Click the button below to register through our official Google Form. Remember to use your
-            KIIT email address.</p>
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <h3>Ready to Join?</h3>
+                        <p>Click the button below to register through our official Google Form. Remember to use your
+                            official email address.</p>
 
-        <!-- Countdown Timer -->
-        <h4 id="countdownTimer" style="margin:15px 0; font-size:20px; color:#ff4d4d;">
-            Registration closes in: <span id="timer"></span>
-        </h4>
+                        <!-- OPEN STATE -->
+                        <div id="reg-open-state" style="display:none; width:100%;">
+                            <div class="timer-box">
+                                <div class="timer-label"><i class="fas fa-hourglass-half"></i> Registration closes in
+                                </div>
+                                <div class="timer-display">
+                                    <div class="timer-unit">
+                                        <span id="timer-days">00</span>
+                                        <small>Days</small>
+                                    </div>
+                                    <div class="timer-sep">:</div>
+                                    <div class="timer-unit">
+                                        <span id="timer-hours">00</span>
+                                        <small>Hours</small>
+                                    </div>
+                                    <div class="timer-sep">:</div>
+                                    <div class="timer-unit">
+                                        <span id="timer-mins">00</span>
+                                        <small>Mins</small>
+                                    </div>
+                                    <div class="timer-sep">:</div>
+                                    <div class="timer-unit">
+                                        <span id="timer-secs">00</span>
+                                        <small>Secs</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <a id="registerBtn" href="https://forms.gle/mfDjfJX7bUUpaCKn8" target="_blank"
+                                class="btn btn-primary btn-register">
+                                <i class="fas fa-pencil-alt"></i> Register Now
+                            </a>
+                            <p class="reg-open-note"><i class="fas fa-exclamation-circle"></i> Use your official KIIT
+                                Email ID only</p>
+                        </div>
 
-        <!-- here is registration link -->
-        <!-- <button id="registerBtn" class="btn btn-primary btn-large">
-            <i class="fas fa-pencil-alt"></i> Register Now
-        </button> -->
+                        <!-- CLOSED STATE -->
+                        <div id="reg-closed-state" style="display:none; width:100%;">
+                            <div class="status-indicator">
+                                <i class="fas fa-times"></i> Registration Closed
+                            </div>
+                            <div class="action-note">
+                                <i class="fas fa-clock"></i>
+                                <div>
+                                    <p>If anyone still wishes to register at this moment, please fill out the form
+                                        available in the Contact &amp; Support section. After submitting the form, you
+                                        will be redirected to send your details via WhatsApp or Email.</p>
+                                    <p style="margin-top: 10px;">We sincerely thank everyone who has already completed
+                                        their registration. Your support means a lot to us. A confirmation email with
+                                        further details will be sent to you soon, so please keep checking your email
+                                        regularly.</p>
+                                    <p style="margin-top: 10px;">Thank you.</p>
+                                </div>
+                            </div>
+                        </div>
 
-
-
-
-
-        <style>
-            .action-note {
-                display: flex;
-                align-items: flex-start;
-                background-color: #fff3cd;
-                border-left: 5px solid #ffc107;
-                color: #856404;
-                padding: 15px 20px;
-                border-radius: 5px;
-                font-family: Arial, sans-serif;
-                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-                margin: 20px 0;
-            }
-
-            .action-note i {
-                font-size: 20px;
-                margin-right: 12px;
-                margin-top: 2px;
-            }
-        </style>
-
-        <p class="action-note">
-            <i class="fas fa-clock"></i>
-            If anyone still wishes to register at this moment, please fill out the form available in the Contact & Support section. After submitting the form, you will be redirected to send your details via WhatsApp or Email.
-
-We sincerely thank everyone who has already completed their registration. Your support means a lot to us.
-
-A confirmation email with further details will be sent to you soon, so please keep checking your email regularly.
-
-<br>Thank you .
-        </p>
-
-    </div>
-</div>
-
-<script>
-const targetTime = new Date("March 14, 2026 23:59:00").getTime();
-const timerElement = document.getElementById("timer");
-const btn = document.getElementById("registerBtn");
-const timerTitle = document.getElementById("countdownTimer");
-
-const countdown = setInterval(function () {
-    const now = new Date().getTime();
-    const distance = targetTime - now;
-
-    if (distance <= 0) {
-        clearInterval(countdown);
-        timerTitle.innerHTML = "❌ Registration Closed";
-        btn.style.display = "none";
-        return;
-    }
-
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-    timerElement.innerHTML = hours + "h " + minutes + "m " + seconds + "s ";
-}, 1000);
-</script></div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -338,28 +260,28 @@ const countdown = setInterval(function () {
     <section id="contact" class="contact">
         <div class="container">
             <h2 class="section-title">Contact & <span>Support</span></h2>
-            <p class="section-subtitle">Get in touch with the Koding Club team for queries and support</p>
+            <p class="section-subtitle">Get in touch with the K{devs} team for queries and support</p>
 
             <div class="contact-options">
                 <div class="contact-option">
-                    <div class="contact-icon whatsapp">
+                    <div class="contact-icon-circle whatsapp-circle">
                         <i class="fab fa-whatsapp"></i>
                     </div>
                     <h3>WhatsApp Query</h3>
                     <p>Fill a quick form with your details and query. We'll redirect you to WhatsApp with all
                         information pre-filled for easy communication.</p>
-                    <button id="whatsappBtn" class="btn btn-whatsapp">
+                    <button id="whatsappBtn" class="btn btn-whatsapp-contact">
                         <i class="fab fa-whatsapp"></i> WhatsApp Query
                     </button>
                 </div>
 
                 <div class="contact-option">
-                    <div class="contact-icon email">
+                    <div class="contact-icon-circle email-circle">
                         <i class="fas fa-envelope"></i>
                     </div>
                     <h3>Email Query</h3>
                     <p>For detailed queries, use our email form. We'll respond to your KIIT email within 24 hours.</p>
-                    <button id="emailQueryBtn" class="btn btn-email">
+                    <button id="emailQueryBtn" class="btn btn-email-contact">
                         <i class="fas fa-envelope"></i> Send Email Query
                     </button>
                 </div>
@@ -377,7 +299,6 @@ const countdown = setInterval(function () {
             <div class="modal-body">
                 <p class="modal-subtitle">Fill this form and we'll redirect you to WhatsApp with all your query details
                 </p>
-
                 <form id="whatsappForm">
                     <div class="form-row">
                         <div class="form-group">
@@ -391,7 +312,6 @@ const countdown = setInterval(function () {
                             <div class="error-message"></div>
                         </div>
                     </div>
-
                     <div class="form-row">
                         <div class="form-group">
                             <label for="wpDepartment">Department *</label>
@@ -401,8 +321,6 @@ const countdown = setInterval(function () {
                                 <option value="BCA">Bachelor in Computer Application</option>
                                 <option value="Msc">Master in Computer Science</option>
                                 <option value="Bsc">Bachelor in Computer Science</option>
-                                <!-- <option value="ME">Mechanical Engineering</option>
-                                <option value="CE">Civil Engineering</option> -->
                                 <option value="Other">Other</option>
                             </select>
                             <div class="error-message"></div>
@@ -413,7 +331,6 @@ const countdown = setInterval(function () {
                             <div class="error-message"></div>
                         </div>
                     </div>
-
                     <div class="form-row">
                         <div class="form-group">
                             <label for="wpMobile">WhatsApp Number *</label>
@@ -427,16 +344,14 @@ const countdown = setInterval(function () {
                             <div class="error-message" id="wpEmailError"></div>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="wpQueryMessage">Query Message *</label>
                         <textarea id="wpQueryMessage" rows="4" required
                             placeholder="Describe your query in detail..."></textarea>
                         <div class="error-message"></div>
                     </div>
-
                     <div class="form-footer">
-                        <button type="submit" class="btn btn-whatsapp">
+                        <button type="submit" class="btn btn-whatsapp-contact">
                             <i class="fab fa-whatsapp"></i> Continue to WhatsApp
                         </button>
                         <button type="button" class="btn btn-secondary close-modal">Cancel</button>
@@ -449,13 +364,12 @@ const countdown = setInterval(function () {
     <!-- Email Modal -->
     <div id="emailModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header email-header">
                 <h2><i class="fas fa-envelope"></i> Email Query Form</h2>
                 <button class="close-modal">&times;</button>
             </div>
             <div class="modal-body">
-                <p class="modal-subtitle">Fill this form to send an email query to the Koding Club team</p>
-
+                <p class="modal-subtitle">Fill this form to send an email query to the K{devs} team</p>
                 <form id="emailForm">
                     <div class="form-row">
                         <div class="form-group">
@@ -469,7 +383,6 @@ const countdown = setInterval(function () {
                             <div class="error-message"></div>
                         </div>
                     </div>
-
                     <div class="form-row">
                         <div class="form-group">
                             <label for="department">Department *</label>
@@ -479,8 +392,6 @@ const countdown = setInterval(function () {
                                 <option value="BCA">Bachelor in Computer Application</option>
                                 <option value="Msc">Master in Computer Science</option>
                                 <option value="Bsc">Bachelor in Computer Science</option>
-                                <!-- <option value="ME">Mechanical Engineering</option>
-                                <option value="CE">Civil Engineering</option> -->
                                 <option value="Other">Other</option>
                             </select>
                             <div class="error-message"></div>
@@ -491,7 +402,6 @@ const countdown = setInterval(function () {
                             <div class="error-message"></div>
                         </div>
                     </div>
-
                     <div class="form-row">
                         <div class="form-group">
                             <label for="mobile">Mobile Number *</label>
@@ -504,13 +414,11 @@ const countdown = setInterval(function () {
                             <div class="error-message" id="emailError"></div>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="queryMessage">Query Message *</label>
                         <textarea id="queryMessage" rows="5" required></textarea>
                         <div class="error-message"></div>
                     </div>
-
                     <div class="form-footer">
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-paper-plane"></i> Send Email Query
@@ -522,81 +430,76 @@ const countdown = setInterval(function () {
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <div class="footer-logo-img">
-                        <img src="https://images.hindi.news18.com/ibnkhabar/uploads/2019/04/KIIT.png" alt="KIIT Logo"
-                            class="kiit-logo-footer">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <h2>KIIT <span>Koding Club</span></h2>
-                    <p>Official KIIT - Koding club community School of Computer Application</p>
-                </div>
-
-                <div class="footer-links">
-                    <h3>Quick Links</h3>
-                    <ul>
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#registration">Registration</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-contact">
-                    <h3>Contact Info</h3>
-
-                    <p>
-                        <i class="fas fa-envelope"></i>
-                        <a href="mailto:2570237@kiit.ac.in">2570237@kiit.ac.in</a>
-                    </p>
-
-                    <p>
-                        <i class="fab fa-whatsapp"></i>
-                        <a href="https://wa.me/917366006363" target="_blank">
-                            +91 7366006363
-                        </a>
-                    </p>
-
-                    <p>
-                        <i class="fab fa-whatsapp"></i>
-                        <a href="https://wa.me/916202839178" target="_blank">
-                            +91 6202839178
-                        </a>
-                    </p>
-
-                    <p>
-                        <i class="fas fa-map-marker-alt"></i>
-                        <a href="https://www.google.com/maps/search/?api=1&query=KIIT+University+Campus+15+School+of+Computer+Application"
-                            target="_blank">
-                            Campus 15, KIIT University, School of Computer Application
-                        </a>
-                    </p>
-                </div>
-
-            </div>
-
-            <div class="footer-bottom">
-                <p>&copy; <span id="currentYear"></span> All Rights Reserved | KIIT Koding Club</p>
-            </div>
-        </div>
-    </footer>
-
     <!-- Success Toast -->
     <div id="successToast" class="toast">
         <div class="toast-content">
             <i class="fas fa-check-circle toast-icon"></i>
             <div class="toast-message">
                 <h4>Success!</h4>
-                <p id="toastText">Email client opened. Please send the email to complete your query.</p>
+                <p id="toastText">Action completed successfully.</p>
             </div>
         </div>
     </div>
 
-    <script src="script.js"></script>
-</body>
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="brand-section">
+                <div class="brand-logo-area">
+                    <img src="./Kdevs.png" alt="KDEVS Logo" class="kdevs-logo">
+                    <!-- <div class="code-icon">&lt;/&gt;</div> -->
+                </div>
+                <div class="brand-title">KIIT <span>Koding Club</span></div>
+                <p class="brand-desc">Official KIIT - Koding club community School of Computer Application</p>
+            </div>
 
-</html>
+            <div class="contact-section">
+                <h3>Contact Info</h3>
+
+                <div class="contact-flex-layout">
+                    <div class="contact-columns">
+                        <div class="contact-col">
+                            <a href="/cdn-cgi/l/email-protection#b88a8d8f888a8b8ff8d3d1d1cc96d9db96d1d6"
+                                class="contact-item hover-email">
+                                <i class="fa-solid fa-envelope"></i>
+                                <span><span class="__cf_email__"
+                                        data-cfemail="cffdfaf8fffdfcf88fa4a6a6bbe1aeace1a6a1">[email&#160;protected]</span></span>
+                            </a>
+                            <a href="https://www.instagram.com/kdev_sca_26?igsh=MXJxa3hqbjJoZXJjZw%3D%3D"
+                                target="_blank" class="contact-item hover-ig">
+                                <i class="fa-brands fa-instagram"></i>
+                                <span>@kdevs_kiit</span>
+                            </a>
+                        </div>
+                        <div class="contact-col">
+                            <a href="https://wa.me/917366006363" target="_blank" class="contact-item hover-wa">
+                                <i class="fa-brands fa-whatsapp"></i>
+                                <span>+91 7366006363</span>
+                            </a>
+                            <a href="https://wa.me/916202839178" target="_blank" class="contact-item hover-wa">
+                                <i class="fa-brands fa-whatsapp"></i>
+                                <span>+91 6202839178</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="contact-bottom">
+                        <div class="contact-item hover-map">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <span>Campus 15, KIIT University, School of<br>Computer Application</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            &copy; <span id="currentYear"></span> K{devs} KIIT Koding club. All rights reserved.
+        </div>
+
+        <script>
+            document.getElementById("currentYear").textContent = new Date().getFullYear();
+        </script>
+
+    </footer>
+    <script src="script.js"></script>
+
+</body>
