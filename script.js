@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================
     // REGISTRATION TIMER
     // =========================
-    const REGISTRATION_CLOSE = new Date("March 20, 2026 23:59:59").getTime();
+    const REGISTRATION_CLOSE = new Date("July 01, 2026 23:59:59").getTime();
     const openState = document.getElementById('reg-open-state');
     const closedState = document.getElementById('reg-closed-state');
     const dEl = document.getElementById('timer-days');
