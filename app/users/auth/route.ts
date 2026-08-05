@@ -1,11 +1,12 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { adminAuth, adminDb } from "@/lib/firebase/admin";
+import { auth } from "@/lib/firebase/config";
 // import fieldvalue
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json().catch(() => ({}));
-    
+
     // Extract Authorization header token or token from body
     const authHeader = request.headers.get("Authorization");
     const bearerToken = authHeader?.startsWith("Bearer ")
@@ -19,7 +20,7 @@ export async function POST(request: Request) {
           success: false,
           error: "Unauthorized: Missing Google ID Token",
         },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -37,13 +38,14 @@ export async function POST(request: Request) {
           email_verified: body.user.emailVerified ?? true,
         };
       } else {
-        const errorMessage = err instanceof Error ? err.message : "Invalid Google OAuth ID Token";
+        const errorMessage =
+          err instanceof Error ? err.message : "Invalid Google OAuth ID Token";
         return NextResponse.json(
           {
             success: false,
             error: `Invalid Google OAuth ID Token: ${errorMessage}`,
           },
-          { status: 401 }
+          { status: 401 },
         );
       }
     }
@@ -55,9 +57,10 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          error: "Access Denied: Only official @kiit.ac.in email addresses are permitted.",
+          error:
+            "Access Denied: Only official @kiit.ac.in email addresses are permitted.",
         },
-        { status: 403 }
+        { status: 403 },
       );
     }
 
@@ -90,7 +93,7 @@ export async function POST(request: Request) {
           message: "Account created successfully",
           user: newUserRecord,
         },
-        { status: 201 }
+        { status: 201 },
       );
     } else {
       // Login User (Update Timestamps)
@@ -116,17 +119,18 @@ export async function POST(request: Request) {
           message: "Login successful",
           user: updatedUserRecord,
         },
-        { status: 200 }
+        { status: 200 },
       );
     }
   } catch (error: unknown) {
-    const errorDetails = error instanceof Error ? error.message : "Internal server error";
+    const errorDetails =
+      error instanceof Error ? error.message : "Internal server error";
     return NextResponse.json(
       {
         success: false,
         error: `Server Authentication Error: ${errorDetails}`,
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
