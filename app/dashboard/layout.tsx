@@ -10,7 +10,6 @@ import {
   signOut,
   signInWithPopup,
   signInWithRedirect,
-  getRedirectResult,
   type User as FirebaseUser,
 } from "firebase/auth";
 import {
@@ -90,24 +89,28 @@ export default function DashboardLayout({
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        try {
-          // Check for a pending redirect-based sign-in result (fallback flow).
-          // Must be called inside onAuthStateChanged to reliably resolve
-          // after the user returns from the Google redirect page.
-          const redirectResult = await getRedirectResult(auth);
-          if (redirectResult?.user) {
-            // Came back from redirect-based sign-in fallback
-            setIsRedirecting(false);
-            await syncUserWithBackend(redirectResult.user);
-          } else {
-            // Normal authenticated session
-            // Initial fallback state
-            setUser({
-              displayName: firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "Member",
-              email: firebaseUser.email || "",
-              photoURL: firebaseUser.photoURL || "",
-            });
+        // Check if we just returned from a redirect-based sign-in fallback.
+        // onAuthStateChanged reliably fires when the user returns from Google,
+        // so we use a sessionStorage flag to detect that flow and sync the
+        // user with the backend (which also creates the DB record).
+        const isRedirectReturn =
+          typeof window !== "undefined" &&
+          window.sessionStorage.getItem("kdevs_redirect_signin") === "true";
 
+        if (isRedirectReturn) {
+          window.sessionStorage.removeItem("kdevs_redirect_signin");
+          setIsRedirecting(false);
+          await syncUserWithBackend(firebaseUser);
+        } else {
+          // Normal authenticated session
+          // Initial fallback state
+          setUser({
+            displayName: firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "Member",
+            email: firebaseUser.email || "",
+            photoURL: firebaseUser.photoURL || "",
+          });
+
+          try {
             const idToken = await firebaseUser.getIdToken();
             const response = await fetch("/api/users/me", {
               headers: {
@@ -126,17 +129,9 @@ export default function DashboardLayout({
                 });
               }
             }
+          } catch (err) {
+            console.error("Failed to load user profile:", err);
           }
-        } catch (err) {
-          console.error("Failed to load user profile:", err);
-          // Even if redirect result resolution failed, firebaseUser is
-          // authenticated — fall back to normal session handling.
-          setIsRedirecting(false);
-          setUser({
-            displayName: firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "Member",
-            email: firebaseUser.email || "",
-            photoURL: firebaseUser.photoURL || "",
-          });
         }
       } else {
         setUser(null);
@@ -244,8 +239,13 @@ export default function DashboardLayout({
             : "Popup was blocked by your browser. Redirecting to Google sign-in..."
         );
         try {
+          // Set a flag so onAuthStateChanged knows to sync the user with the
+          // backend when they return from the Google redirect page.
+          if (typeof window !== "undefined") {
+            window.sessionStorage.setItem("kdevs_redirect_signin", "true");
+          }
           await signInWithRedirect(auth, googleProvider);
-          // Page will redirect to Google; result is handled by getRedirectResult on return
+          // Page will redirect to Google; onAuthStateChanged handles the return
         } catch (redirectError) {
           console.error("Redirect sign-in error:", redirectError);
           setAuthError(getAuthErrorMessage(redirectError));
