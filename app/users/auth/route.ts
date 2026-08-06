@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
-import { adminAuth, adminDb } from "@/lib/firebase/admin";
+import { adminAuth } from "@/lib/firebase/admin";
+import { syncUser } from "@/lib/firebase/db";
 
 export async function POST(request: NextRequest) {
   try {
@@ -62,64 +63,38 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 2. Query Firestore users collection with Unique Document ID (uid)
-    const userRef = adminDb.collection("users").doc(uid);
-    const userDoc = await userRef.get();
+    // 2. Sync user document via our standardized database layer
+    const syncedUser = await syncUser(uid, {
+      name: name || email.split("@")[0],
+      email: email,
+      photoURL: picture || "",
+    });
 
-    const nowIso = new Date().toISOString();
+    const isNewDoc = syncedUser.createdAt === syncedUser.updatedAt;
 
-    if (!userDoc.exists) {
-      // Create Account (New User Document with Unique UID and Timestamps)
-      const newUserRecord = {
-        uid,
-        email,
-        displayName: name || email.split("@")[0],
-        photoURL: picture || "",
-        emailVerified: !!email_verified,
-        role: "member",
-        createdAt: nowIso,
-        lastLoginAt: nowIso,
-        updatedAt: nowIso,
-      };
+    const userResponse = {
+      uid: syncedUser.id,
+      id: syncedUser.id,
+      email: syncedUser.email,
+      displayName: syncedUser.name,
+      name: syncedUser.name,
+      photoURL: syncedUser.photoURL,
+      emailVerified: !!email_verified,
+      role: syncedUser.role,
+      createdAt: syncedUser.createdAt,
+      lastLoginAt: syncedUser.lastLoginAt,
+      updatedAt: syncedUser.updatedAt,
+    };
 
-      await userRef.set(newUserRecord);
-
-      return NextResponse.json(
-        {
-          success: true,
-          isNewUser: true,
-          message: "Account created successfully",
-          user: newUserRecord,
-        },
-        { status: 201 },
-      );
-    } else {
-      // Login User (Update Timestamps)
-      const updateData = {
-        displayName: name || userDoc.data()?.displayName,
-        photoURL: picture || userDoc.data()?.photoURL,
-        lastLoginAt: nowIso,
-        updatedAt: nowIso,
-      };
-
-      await userRef.update(updateData);
-
-      const existingData = userDoc.data();
-      const updatedUserRecord = {
-        ...existingData,
-        ...updateData,
-      };
-
-      return NextResponse.json(
-        {
-          success: true,
-          isNewUser: false,
-          message: "Login successful",
-          user: updatedUserRecord,
-        },
-        { status: 200 },
-      );
-    }
+    return NextResponse.json(
+      {
+        success: true,
+        isNewUser: isNewDoc,
+        message: isNewDoc ? "Account created successfully" : "Login successful",
+        user: userResponse,
+      },
+      { status: isNewDoc ? 201 : 200 },
+    );
   } catch (error: unknown) {
     const errorDetails =
       error instanceof Error ? error.message : "Internal server error";

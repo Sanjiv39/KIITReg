@@ -3,6 +3,9 @@
 import { useState, useEffect } from "react";
 import { CheckCircle2, AlertTriangle, Star, Hourglass, Edit3, Clock, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { auth } from "@/lib/firebase/config";
+import { onAuthStateChanged } from "firebase/auth";
 
 const REGISTRATION_CLOSE = new Date("July 01, 2026 23:59:59").getTime();
 
@@ -14,6 +17,14 @@ export function Registration() {
     secs: "00",
   });
   const [isClosed, setIsClosed] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setIsAuthenticated(!!user);
+    });
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     const pad = (n: number) => String(n).padStart(2, "0");
@@ -155,6 +166,13 @@ export function Registration() {
                     </a>
                   </Button>
 
+                  {/* Dashboard / Login Button */}
+                  <Button asChild variant="secondary" size="lg" className="w-full text-base font-semibold py-3.5">
+                    <Link href="/dashboard">
+                      {isAuthenticated ? "Go to Dashboard" : "Login / Sign Up"}
+                    </Link>
+                  </Button>
+
                   <p className="text-xs text-amber-400 flex items-center justify-center gap-1.5">
                     <AlertTriangle className="w-3.5 h-3.5" /> Use your official KIIT Email ID only
                   </p>
@@ -177,6 +195,13 @@ export function Registration() {
                       We sincerely thank everyone who has already completed their registration. A confirmation email with further details will be sent to you soon.
                     </p>
                   </div>
+
+                  {/* Dashboard / Login Button */}
+                  <Button asChild variant="secondary" size="lg" className="w-full text-base font-semibold py-3.5">
+                    <Link href="/dashboard">
+                      {isAuthenticated ? "Go to Dashboard" : "Login / Sign Up"}
+                    </Link>
+                  </Button>
                 </div>
               )}
             </div>

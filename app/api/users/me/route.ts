@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import { adminAuth, adminDb } from "@/lib/firebase/admin";
+import { getUser } from "@/lib/firebase/db";
 
 export async function PATCH(request: NextRequest) {
   try {
@@ -29,10 +30,14 @@ export async function PATCH(request: NextRequest) {
     const { uid } = decodedToken;
     const body = await request.json().catch(() => ({}));
 
-    // Only allow updating displayName for now
+    // Support updating name (matching DB schema) and legacy displayName
     const updateData: Record<string, string> = {};
     if (body.displayName && typeof body.displayName === "string") {
+      updateData.name = body.displayName.trim();
       updateData.displayName = body.displayName.trim();
+    } else if (body.name && typeof body.name === "string") {
+      updateData.name = body.name.trim();
+      updateData.displayName = body.name.trim();
     }
 
     if (Object.keys(updateData).length === 0) {
@@ -56,24 +61,29 @@ export async function PATCH(request: NextRequest) {
 
     await userRef.update(updateData);
 
-    const updatedData = {
-      ...userDoc.data(),
-      ...updateData,
-    };
+    const updatedUser = await getUser(uid);
+    if (!updatedUser) {
+      return NextResponse.json(
+        { success: false, error: "User details could not be retrieved" },
+        { status: 500 },
+      );
+    }
 
     return NextResponse.json({
       success: true,
       message: "Profile updated successfully",
       user: {
-        uid: updatedData?.uid || uid,
-        email: updatedData?.email || "",
-        displayName: updatedData?.displayName || "",
-        photoURL: updatedData?.photoURL || "",
-        emailVerified: updatedData?.emailVerified ?? false,
-        role: updatedData?.role || "member",
-        createdAt: updatedData?.createdAt || "",
-        lastLoginAt: updatedData?.lastLoginAt || "",
-        updatedAt: updatedData?.updatedAt || "",
+        uid: updatedUser.id,
+        id: updatedUser.id,
+        email: updatedUser.email,
+        displayName: updatedUser.name,
+        name: updatedUser.name,
+        photoURL: updatedUser.photoURL,
+        emailVerified: userDoc.data()?.emailVerified ?? false,
+        role: updatedUser.role,
+        createdAt: updatedUser.createdAt,
+        lastLoginAt: updatedUser.lastLoginAt,
+        updatedAt: updatedUser.updatedAt,
       },
     });
   } catch (error: unknown) {
@@ -113,31 +123,31 @@ export async function GET(request: NextRequest) {
 
     const { uid } = decodedToken;
 
-    // Fetch user document from Firestore
-    const userRef = adminDb.collection("users").doc(uid);
-    const userDoc = await userRef.get();
-
-    if (!userDoc.exists) {
+    const user = await getUser(uid);
+    if (!user) {
       return NextResponse.json(
         { success: false, error: "User not found" },
         { status: 404 },
       );
     }
 
-    const userData = userDoc.data();
+    // Retrieve original doc for emailVerified
+    const userDoc = await adminDb.collection("users").doc(uid).get();
 
     return NextResponse.json({
       success: true,
       user: {
-        uid: userData?.uid || uid,
-        email: userData?.email || "",
-        displayName: userData?.displayName || "",
-        photoURL: userData?.photoURL || "",
-        emailVerified: userData?.emailVerified ?? false,
-        role: userData?.role || "member",
-        createdAt: userData?.createdAt || "",
-        lastLoginAt: userData?.lastLoginAt || "",
-        updatedAt: userData?.updatedAt || "",
+        uid: user.id,
+        id: user.id,
+        email: user.email,
+        displayName: user.name,
+        name: user.name,
+        photoURL: user.photoURL,
+        emailVerified: userDoc.data()?.emailVerified ?? false,
+        role: user.role,
+        createdAt: user.createdAt,
+        lastLoginAt: user.lastLoginAt,
+        updatedAt: user.updatedAt,
       },
     });
   } catch (error: unknown) {

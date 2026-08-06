@@ -33,60 +33,17 @@ interface UserData {
 }
 
 const STATS = [
-  { label: "Events Attended", value: "3", icon: CalendarDays, color: "text-[#00f2fe]" },
-  { label: "Workshops", value: "5", icon: Code2, color: "text-[#4facfe]" },
-  { label: "Network", value: "12", icon: Users, color: "text-emerald-400" },
-  { label: "Achievements", value: "2", icon: Trophy, color: "text-amber-400" },
+  { label: "Workshops Attended", value: "5", icon: Code2, color: "text-[#00f2fe]" },
+  { label: "Quiz Attended", value: "2", icon: Award, color: "text-amber-400" },
 ];
 
-const UPCOMING_EVENTS = [
-  {
-    title: "Hackathon 2026",
-    date: "Aug 15, 2026",
-    time: "10:00 AM",
-    location: "KIIT SCA Auditorium",
-    status: "Upcoming",
-  },
+const UPCOMING_WORKSHOPS_QUIZZES = [
   {
     title: "Web Dev Workshop",
     date: "Aug 22, 2026",
     time: "2:00 PM",
     location: "Lab 3, Block C",
     status: "Upcoming",
-  },
-  {
-    title: "AI/ML Bootcamp",
-    date: "Sep 05, 2026",
-    time: "11:00 AM",
-    location: "Online (Zoom)",
-    status: "Upcoming",
-  },
-];
-
-const RECENT_ACTIVITY = [
-  {
-    title: "Registered for Hackathon 2026",
-    time: "2 days ago",
-    icon: CalendarDays,
-    color: "text-[#00f2fe] bg-[#00f2fe]/10 border-[#00f2fe]/20",
-  },
-  {
-    title: "Completed Web Dev Workshop",
-    time: "1 week ago",
-    icon: Code2,
-    color: "text-[#4facfe] bg-[#4facfe]/10 border-[#4facfe]/20",
-  },
-  {
-    title: "Earned 'First Hack' Badge",
-    time: "2 weeks ago",
-    icon: Award,
-    color: "text-amber-400 bg-amber-400/10 border-amber-400/20",
-  },
-  {
-    title: "Joined K{devs} Community",
-    time: "1 month ago",
-    icon: Users,
-    color: "text-emerald-400 bg-emerald-400/10 border-emerald-400/20",
   },
 ];
 
@@ -198,7 +155,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {STATS.map((stat) => {
           const Icon = stat.icon;
           return (
@@ -219,14 +176,14 @@ export default function DashboardPage() {
         })}
       </div>
 
-      {/* Main Grid: Upcoming Events + Recent Activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Upcoming Events */}
+      {/* Main Grid: Upcoming Workshops & Quizzes */}
+      <div className="grid grid-cols-1 gap-6">
+        {/* Upcoming Workshops & Quizzes */}
         <div className="rounded-2xl bg-slate-900/60 border border-white/10 overflow-hidden">
           <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
             <div className="flex items-center gap-2">
               <CalendarDays className="w-5 h-5 text-[#00f2fe]" />
-              <h2 className="font-bold text-white">Upcoming Events</h2>
+              <h2 className="font-bold text-white">Upcoming Workshops & Quizzes</h2>
             </div>
             <Link
               href="/dashboard/events"
@@ -236,99 +193,29 @@ export default function DashboardPage() {
             </Link>
           </div>
           <div className="divide-y divide-white/5">
-            {UPCOMING_EVENTS.map((event) => (
-              <div key={event.title} className="px-6 py-4 hover:bg-white/5 transition-colors">
+            {UPCOMING_WORKSHOPS_QUIZZES.map((item) => (
+              <div key={item.title} className="px-6 py-4 hover:bg-white/5 transition-colors">
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0">
-                    <h3 className="font-semibold text-white text-sm mb-1">{event.title}</h3>
+                    <h3 className="font-semibold text-white text-sm mb-1">{item.title}</h3>
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-400">
                       <span className="flex items-center gap-1">
-                        <CalendarDays className="w-3 h-3" /> {event.date}
+                        <CalendarDays className="w-3 h-3" /> {item.date}
                       </span>
                       <span className="flex items-center gap-1">
-                        <Clock className="w-3 h-3" /> {event.time}
+                        <Clock className="w-3 h-3" /> {item.time}
                       </span>
                       <span className="flex items-center gap-1">
-                        <Users className="w-3 h-3" /> {event.location}
+                        <Users className="w-3 h-3" /> {item.location}
                       </span>
                     </div>
                   </div>
                   <span className="shrink-0 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-[#00f2fe]/10 text-[#00f2fe] border border-[#00f2fe]/20">
-                    {event.status}
+                    {item.status}
                   </span>
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* Recent Activity */}
-        <div className="rounded-2xl bg-slate-900/60 border border-white/10 overflow-hidden">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
-            <div className="flex items-center gap-2">
-              <Clock className="w-5 h-5 text-[#00f2fe]" />
-              <h2 className="font-bold text-white">Recent Activity</h2>
-            </div>
-          </div>
-          <div className="divide-y divide-white/5">
-            {RECENT_ACTIVITY.map((activity, idx) => {
-              const Icon = activity.icon;
-              return (
-                <div key={idx} className="px-6 py-4 flex items-center gap-4 hover:bg-white/5 transition-colors">
-                  <div className={`p-2.5 rounded-xl border ${activity.color}`}>
-                    <Icon className="w-4 h-4" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-white truncate">{activity.title}</p>
-                    <p className="text-xs text-slate-400 mt-0.5">{activity.time}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-      {/* Profile Summary Card */}
-      <div className="rounded-2xl bg-slate-900/60 border border-white/10 p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-2">
-            <User className="w-5 h-5 text-[#00f2fe]" />
-            <h2 className="font-bold text-white">Profile Summary</h2>
-          </div>
-          <Link
-            href="/dashboard/profile"
-            className="text-xs font-medium text-[#00f2fe] hover:text-[#4facfe] flex items-center gap-1"
-          >
-            Edit profile <ChevronRight className="w-3 h-3" />
-          </Link>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <div className="flex items-center gap-2 text-xs text-slate-400 mb-1">
-              <Mail className="w-3.5 h-3.5" /> Email
-            </div>
-            <p className="text-sm font-medium text-white truncate">{userData?.email}</p>
-          </div>
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <div className="flex items-center gap-2 text-xs text-slate-400 mb-1">
-              <ShieldCheck className="w-3.5 h-3.5" /> Role
-            </div>
-            <p className="text-sm font-medium text-white capitalize">{userData?.role || "Member"}</p>
-          </div>
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <div className="flex items-center gap-2 text-xs text-slate-400 mb-1">
-              <Clock className="w-3.5 h-3.5" /> Last Login
-            </div>
-            <p className="text-sm font-medium text-white">{formatDate(userData?.lastLoginAt || "")}</p>
-          </div>
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <div className="flex items-center gap-2 text-xs text-slate-400 mb-1">
-              <Award className="w-3.5 h-3.5" /> Status
-            </div>
-            <p className="text-sm font-medium text-emerald-400">
-              {userData?.emailVerified ? "Verified" : "Pending"}
-            </p>
           </div>
         </div>
       </div>

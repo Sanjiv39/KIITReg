@@ -12,73 +12,20 @@ import {
   XCircle,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
 
 const EVENTS = [
   {
     id: 1,
-    title: "Hackathon 2026",
-    date: "Aug 15, 2026",
-    time: "10:00 AM - 6:00 PM",
-    location: "KIIT SCA Auditorium",
-    description: "24-hour coding challenge to build innovative solutions. Teams of 2-4 members.",
-    category: "Hackathon",
-    status: "upcoming",
-    registered: true,
-  },
-  {
-    id: 2,
     title: "Web Dev Workshop",
-    date: "Aug 22, 2026",
+    date: "Aug 05, 2026",
     time: "2:00 PM - 5:00 PM",
     location: "Lab 3, Block C",
     description: "Hands-on workshop covering modern web development with React and Next.js.",
     category: "Workshop",
-    status: "upcoming",
-    registered: false,
-  },
-  {
-    id: 3,
-    title: "AI/ML Bootcamp",
-    date: "Sep 05, 2026",
-    time: "11:00 AM - 4:00 PM",
-    location: "Online (Zoom)",
-    description: "Introduction to machine learning concepts with practical Python implementations.",
-    category: "Bootcamp",
-    status: "upcoming",
-    registered: false,
-  },
-  {
-    id: 4,
-    title: "Code Sprint",
-    date: "Jul 20, 2026",
-    time: "9:00 AM - 1:00 PM",
-    location: "Lab 1, Block A",
-    description: "Competitive programming contest focused on algorithms and data structures.",
-    category: "Competition",
     status: "completed",
     registered: true,
-  },
-  {
-    id: 5,
-    title: "Tech Talk: Cloud Computing",
-    date: "Jul 10, 2026",
-    time: "3:00 PM - 4:30 PM",
-    location: "Seminar Hall 2",
-    description: "Guest lecture on cloud infrastructure and deployment strategies.",
-    category: "Seminar",
-    status: "completed",
-    registered: true,
-  },
-  {
-    id: 6,
-    title: "Git & GitHub Masterclass",
-    date: "Jun 28, 2026",
-    time: "2:00 PM - 4:00 PM",
-    location: "Lab 2, Block B",
-    description: "Learn version control, collaboration workflows, and open source contribution.",
-    category: "Workshop",
-    status: "completed",
-    registered: false,
+    hasQuiz: true,
   },
 ];
 
@@ -230,6 +177,13 @@ export default function EventsPage() {
                       Register Now <ArrowUpRight className="w-4 h-4" />
                     </button>
                   )
+                ) : event.hasQuiz ? (
+                  <Link
+                    href="/dashboard/quiz"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#00f2fe] to-[#4facfe] text-slate-950 text-sm font-bold hover:shadow-[0_4px_15px_rgba(0,242,254,0.4)] transition-all"
+                  >
+                    Attend Quiz <ArrowUpRight className="w-4 h-4" />
+                  </Link>
                 ) : (
                   <div className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-400 text-sm font-medium">
                     <XCircle className="w-4 h-4" />

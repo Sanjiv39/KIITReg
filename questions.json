@@ -1,0 +1,52 @@
+[
+  {
+    "text": "What does HTML stand for?",
+    "options": [
+      "Hyper Text Markup Language",
+      "High Text Markup Language",
+      "Hyper Tabular Markup Language",
+      "None of the above"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "text": "Which of the following is a CSS framework?",
+    "options": [
+      "React JS",
+      "Django",
+      "Tailwind CSS",
+      "Express JS"
+    ],
+    "correct_answer": 2
+  },
+  {
+    "text": "What is the purpose of Next.js 'use client' directive?",
+    "options": [
+      "To run code exclusively on the client side",
+      "To run code exclusively on the server side",
+      "To register client libraries",
+      "To optimize images"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "text": "Which HTTP method is used to create a new resource on the server?",
+    "options": [
+      "GET",
+      "POST",
+      "PUT",
+      "DELETE"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "text": "What is the primary role of a Key prop in React lists?",
+    "options": [
+      "To uniquely identify an element among its siblings for reconciliation",
+      "To secure list item data",
+      "To apply CSS styles to elements",
+      "To bind click event handlers"
+    ],
+    "correct_answer": 0
+  }
+]

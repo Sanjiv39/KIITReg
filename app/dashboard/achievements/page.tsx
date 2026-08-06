@@ -23,58 +23,10 @@ const ACHIEVEMENTS = [
     earned: true,
     date: "Jul 2026",
   },
-  {
-    id: 2,
-    title: "Workshop Warrior",
-    description: "Attended 5+ workshops",
-    icon: Code2,
-    color: "text-[#4facfe] bg-[#4facfe]/10 border-[#4facfe]/20",
-    earned: true,
-    date: "Jun 2026",
-  },
-  {
-    id: 3,
-    title: "Community Builder",
-    description: "Connected with 10+ members",
-    icon: Users,
-    color: "text-emerald-400 bg-emerald-400/10 border-emerald-400/20",
-    earned: true,
-    date: "May 2026",
-  },
-  {
-    id: 4,
-    title: "Code Sprint Champion",
-    description: "Top 10 in a competitive programming contest",
-    icon: Trophy,
-    color: "text-amber-400 bg-amber-400/10 border-amber-400/20",
-    earned: false,
-    date: "Locked",
-  },
-  {
-    id: 5,
-    title: "AI Pioneer",
-    description: "Complete the AI/ML Bootcamp",
-    icon: Star,
-    color: "text-purple-400 bg-purple-400/10 border-purple-400/20",
-    earned: false,
-    date: "Locked",
-  },
-  {
-    id: 6,
-    title: "Open Source Contributor",
-    description: "Make your first contribution to a K{devs} project",
-    icon: Medal,
-    color: "text-pink-400 bg-pink-400/10 border-pink-400/20",
-    earned: false,
-    date: "Locked",
-  },
 ];
 
 const SKILLS = [
   { name: "Web Development", level: 75, color: "from-[#00f2fe] to-[#4facfe]" },
-  { name: "Competitive Programming", level: 60, color: "from-emerald-400 to-teal-400" },
-  { name: "AI/ML", level: 40, color: "from-purple-400 to-pink-400" },
-  { name: "Cloud & DevOps", level: 30, color: "from-amber-400 to-orange-400" },
 ];
 
 export default function AchievementsPage() {
