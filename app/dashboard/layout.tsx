@@ -90,34 +90,53 @@ export default function DashboardLayout({
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        // Initial fallback state
-        setUser({
-          displayName: firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "Member",
-          email: firebaseUser.email || "",
-          photoURL: firebaseUser.photoURL || "",
-        });
-
         try {
-          const idToken = await firebaseUser.getIdToken();
-          const response = await fetch("/api/users/me", {
-            headers: {
-              Authorization: `Bearer ${idToken}`,
-            },
-          });
+          // Check for a pending redirect-based sign-in result (fallback flow).
+          // Must be called inside onAuthStateChanged to reliably resolve
+          // after the user returns from the Google redirect page.
+          const redirectResult = await getRedirectResult(auth);
+          if (redirectResult?.user) {
+            // Came back from redirect-based sign-in fallback
+            setIsRedirecting(false);
+            await syncUserWithBackend(redirectResult.user);
+          } else {
+            // Normal authenticated session
+            // Initial fallback state
+            setUser({
+              displayName: firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "Member",
+              email: firebaseUser.email || "",
+              photoURL: firebaseUser.photoURL || "",
+            });
 
-          if (response.ok) {
-            const data = await response.json();
-            if (data.success && data.user) {
-              setUser({
-                displayName: data.user.displayName || data.user.name || firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "Member",
-                email: data.user.email || firebaseUser.email || "",
-                photoURL: data.user.photoURL || firebaseUser.photoURL || "",
-                role: data.user.role,
-              });
+            const idToken = await firebaseUser.getIdToken();
+            const response = await fetch("/api/users/me", {
+              headers: {
+                Authorization: `Bearer ${idToken}`,
+              },
+            });
+
+            if (response.ok) {
+              const data = await response.json();
+              if (data.success && data.user) {
+                setUser({
+                  displayName: data.user.displayName || data.user.name || firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "Member",
+                  email: data.user.email || firebaseUser.email || "",
+                  photoURL: data.user.photoURL || firebaseUser.photoURL || "",
+                  role: data.user.role,
+                });
+              }
             }
           }
         } catch (err) {
           console.error("Failed to load user profile:", err);
+          // Even if redirect result resolution failed, firebaseUser is
+          // authenticated — fall back to normal session handling.
+          setIsRedirecting(false);
+          setUser({
+            displayName: firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "Member",
+            email: firebaseUser.email || "",
+            photoURL: firebaseUser.photoURL || "",
+          });
         }
       } else {
         setUser(null);
@@ -126,6 +145,7 @@ export default function DashboardLayout({
     });
 
     return () => unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getAuthErrorMessage = (error: unknown): string => {
@@ -200,20 +220,6 @@ export default function DashboardLayout({
       console.error("Failed to sync user with backend:", err);
     }
   }, []);
-
-  // Handle result from redirect-based sign-in (fallback when popup is blocked/unavailable)
-  useEffect(() => {
-    getRedirectResult(auth)
-      .then(async (result) => {
-        if (result?.user) {
-          await syncUserWithBackend(result.user);
-        }
-      })
-      .catch((error) => {
-        console.error("Redirect sign-in error:", error);
-        setAuthError(getAuthErrorMessage(error));
-      });
-  }, [syncUserWithBackend]);
 
   const handleGoogleSignIn = async () => {
     setIsSigningIn(true);
