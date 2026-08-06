@@ -48,5 +48,55 @@
       "To bind click event handlers"
     ],
     "correct_answer": 0
+  },
+  {
+    "text": "Which of the following is NOT a JavaScript data type?",
+    "options": [
+      "String",
+      "Boolean",
+      "Float",
+      "Undefined"
+    ],
+    "correct_answer": 2
+  },
+  {
+    "text": "What is the purpose of the useEffect hook in React?",
+    "options": [
+      "To perform side effects in functional components",
+      "To store local component state",
+      "To navigate between pages",
+      "To create context providers"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "text": "What does the HTTP 403 status code represent?",
+    "options": [
+      "Bad Request",
+      "Unauthorized",
+      "Forbidden",
+      "Not Found"
+    ],
+    "correct_answer": 2
+  },
+  {
+    "text": "Which Next.js routing structure uses the 'app/' directory?",
+    "options": [
+      "Pages Router",
+      "App Router",
+      "Dynamic Router",
+      "Static Router"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "text": "In CSS, what is the default value of the position property?",
+    "options": [
+      "relative",
+      "absolute",
+      "static",
+      "fixed"
+    ],
+    "correct_answer": 2
   }
 ]

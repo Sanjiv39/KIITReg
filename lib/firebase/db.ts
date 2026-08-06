@@ -31,6 +31,7 @@ export interface Result {
   user_name: string;
   user_email: string;
   score: number;
+  answers?: Record<string, number>;
   completed_at: string;
 }
 

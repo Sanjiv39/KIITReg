@@ -22,6 +22,7 @@ interface Question {
   id: string;
   text: string;
   options: string[];
+  correct_answer?: number;
 }
 
 interface ResultData {
@@ -45,6 +46,7 @@ export default function QuizPage() {
     totalQuestions: number;
     passed: boolean;
   } | null>(null);
+  const [showReview, setShowReview] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -72,10 +74,11 @@ export default function QuizPage() {
         const data = await response.json();
         if (data.completed) {
           setQuizCompleted(true);
+          const totalQ = data.totalQuestions || 10;
           setScoreResult({
             score: data.result.score,
-            totalQuestions: 3, // default dummy questions count
-            passed: data.result.score >= 2,
+            totalQuestions: totalQ,
+            passed: data.result.score >= Math.ceil(totalQ * 0.6),
           });
         } else {
           setQuestions(data.questions || []);
@@ -179,7 +182,7 @@ export default function QuizPage() {
           </div>
 
           <div>
-            <h1 className="text-3xl font-extrabold text-white">Quiz Result</h1>
+            <h1 className="text-3xl font-extrabold text-white">Quiz Completed</h1>
             <p className="text-slate-400 text-sm mt-1.5">
               {scoreResult.passed
                 ? "Congratulations! You have successfully passed the quiz."
@@ -197,7 +200,7 @@ export default function QuizPage() {
               / {scoreResult.totalQuestions}
             </div>
             <div className="text-xs text-slate-500 mt-1">
-              Passing requirement: 2 / 3 questions
+              Passing requirement: {Math.ceil(scoreResult.totalQuestions * 0.6)} / {scoreResult.totalQuestions} questions
             </div>
           </div>
 
@@ -215,8 +218,11 @@ export default function QuizPage() {
             </Button>
           </div>
 
-          <div className="pt-4">
-            <Button asChild variant="secondary" className="px-8">
+          <div className="pt-4 flex flex-col sm:flex-row gap-3 justify-center">
+            <Button asChild variant="outline" className="px-6 border-[#00f2fe]/20 text-[#00f2fe] hover:bg-[#00f2fe]/10">
+              <Link href="/dashboard/results">Detailed Question Review</Link>
+            </Button>
+            <Button asChild variant="secondary" className="px-6">
               <Link href="/dashboard/events">Return to Events</Link>
             </Button>
           </div>

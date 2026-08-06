@@ -32,10 +32,12 @@ export async function GET(request: NextRequest) {
     // Check if user already took the quiz
     const existingResult = await getUserResult(uid);
     if (existingResult) {
+      const questions = await getQuestions();
       return NextResponse.json({
         success: true,
         completed: true,
         result: existingResult,
+        totalQuestions: questions.length,
       });
     }
 
@@ -126,6 +128,7 @@ export async function POST(request: NextRequest) {
       user_name: userName,
       user_email: userEmail,
       score,
+      answers: userAnswers,
     });
 
     return NextResponse.json({
@@ -134,6 +137,7 @@ export async function POST(request: NextRequest) {
       totalQuestions: questions.length,
       passed,
       result: savedResult,
+      questions, // Send full questions for review
     });
   } catch (error: unknown) {
     const errorDetails = error instanceof Error ? error.message : "Server error";
