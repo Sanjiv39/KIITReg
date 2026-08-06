@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { auth, googleProvider } from "@/lib/firebase/config";
 import { onAuthStateChanged, signOut, signInWithPopup } from "firebase/auth";
 import {
@@ -22,7 +23,7 @@ import {
 const NAV_ITEMS = [
   { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
   { label: "Profile", href: "/dashboard/profile", icon: User },
-  { label: "Events", href: "/dashboard/events", icon: CalendarDays, accessed },
+  { label: "Events", href: "/dashboard/events", icon: CalendarDays },
   { label: "Achievements", href: "/dashboard/achievements", icon: Award },
   // { label: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
@@ -32,10 +33,45 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+  const [activeTab, setActiveTab] = useState<string>(() => {
+    if (typeof window !== "undefined") {
+      const path = window.location.pathname;
+      const matched = NAV_ITEMS.find((item) => {
+        if (item.href === "/dashboard") {
+          return path === "/dashboard";
+        }
+        return path.startsWith(item.href);
+      });
+      if (matched) return matched.href;
+      if (path.startsWith("/dashboard/quiz") || path.startsWith("/dashboard/results") || path.startsWith("/dashboard/registered-users")) {
+        return "/dashboard/events";
+      }
+    }
+    return "/dashboard";
+  });
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const matched = NAV_ITEMS.find((item) => {
+      if (item.href === "/dashboard") {
+        return pathname === "/dashboard";
+      }
+      return pathname.startsWith(item.href);
+    });
+
+    if (matched) {
+      setActiveTab(matched.href);
+    } else {
+      if (pathname.startsWith("/dashboard/quiz") || pathname.startsWith("/dashboard/results") || pathname.startsWith("/dashboard/registered-users")) {
+        setActiveTab("/dashboard/events");
+      }
+    }
+  }, [pathname]);
   const [user, setUser] = useState<{
     displayName: string;
     email: string;
@@ -297,9 +333,7 @@ export default function DashboardLayout({
         <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
           {NAV_ITEMS.map((item) => {
             const Icon = item.icon;
-            const isActive =
-              typeof window !== "undefined" &&
-              window.location.pathname === item.href;
+            const isActive = activeTab === item.href;
             return (
               <Link
                 key={item.href}
