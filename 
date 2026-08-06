@@ -1,0 +1,167 @@
+[33mcommit 7ed4e4063641314962ae767c49f24865b5fdf151[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdev[m[33m)[m
+Author: abhay-kumawat-301 <abhaykumawat301@gmail.com>
+Date:   Thu Aug 6 20:45:35 2026 +0530
+
+    fix : quiz results render and APIs
+
+[33mcommit cf388e57893aace8545a176ccfc18fc9e057c962[m[33m ([m[1;31morigin/dev[m[33m)[m
+Author: abhay-kumawat-301 <abhaykumawat301@gmail.com>
+Date:   Thu Aug 6 19:12:20 2026 +0530
+
+    Change: Working on quiz result page
+
+[33mcommit 8147f247bf7c7a730c4156ad3aff539ddd352e2b[m[33m ([m[1;32mnextjs-rev[m[33m)[m
+Author: abhay-kumawat-301 <abhaykumawat301@gmail.com>
+Date:   Thu Aug 6 17:10:59 2026 +0530
+
+    Changes: Integrated User Apis and Quiz Apis with MKB 🥵 DB
+
+[33mcommit cf087bccfbe87519a66228ff0c30a39620237f36[m[33m ([m[1;31morigin/nextjs-rev[m[33m)[m
+Author: Ashishdomain <sahuashish7059@gmail.com>
+Date:   Thu Aug 6 14:54:42 2026 +0530
+
+    changes : added dashboard pages
+
+[33mcommit b382a5279d0c82861aa2b93b0fc5be29150e04ac[m
+Author: Ashishdomain <sahuashish7059@gmail.com>
+Date:   Thu Aug 6 13:21:56 2026 +0530
+
+    fix : firebase admin service account utils
+
+[33mcommit 17f5f313aa0fef65e47fe24ef255925d064244f8[m
+Author: Ashishdomain <sahuashish7059@gmail.com>
+Date:   Wed Aug 5 15:13:46 2026 +0530
+
+    minor changes
+
+[33mcommit abc75661ff1a8ce6c88790ad022eec61f8c10aa9[m
+Author: Ashishdomain <sahuashish7059@gmail.com>
+Date:   Wed Aug 5 15:00:59 2026 +0530
+
+    migration init from vanilla to next js
+
+[33mcommit b7b1296be5b31e51848960f0eda51f2d4906a85d[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: Sumit Kumar <120784270+sumit7366@users.noreply.github.com>
+Date:   Tue Mar 31 12:42:08 2026 +0530
+
+    Update script.js
+
+[33mcommit 64fc8ff11a018fc164b719318eb98496926fde85[m
+Author: Sumit Kumar <120784270+sumit7366@users.noreply.github.com>
+Date:   Tue Mar 31 02:22:46 2026 +0530
+
+    Update index.html
+
+[33mcommit b87cb28550741a1ea2326621d11ae3379d63df3d[m
+Author: Sumit Kumar <120784270+sumit7366@users.noreply.github.com>
+Date:   Tue Mar 31 02:18:03 2026 +0530
+
+    Add files via upload
+
+[33mcommit d173ffc0bf8867fa9d11a914dacca2d323a022db[m
+Author: Sumit Kumar <120784270+sumit7366@users.noreply.github.com>
+Date:   Tue Mar 31 02:17:34 2026 +0530
+
+    Update style.css
+
+[33mcommit f79c29d63a9f410eefa436cc0888330e7b0ae151[m
+Author: Sumit Kumar <120784270+sumit7366@users.noreply.github.com>
+Date:   Tue Mar 31 02:17:18 2026 +0530
+
+    Update script.js
+
+[33mcommit 29443f4b11de9b24682794c4806a0ea71928512a[m
+Author: Sumit Kumar <120784270+sumit7366@users.noreply.github.com>
+Date:   Tue Mar 31 02:16:57 2026 +0530
+
+    Update index.html
+
+[33mcommit c4a1f95c411b92ea00de65403d813535419e3efb[m
+Author: Sumit Kumar <120784270+sumit7366@users.noreply.github.com>
+Date:   Sun Mar 15 00:45:03 2026 +0530
+
+    Update index.html
+
+[33mcommit 7beb64436e05f9c3e791cff305f97fc01ce76b77[m
+Author: Sumit Kumar <120784270+sumit7366@users.noreply.github.com>
+Date:   Sun Mar 15 00:43:38 2026 +0530
+
+    Update index.html
+
+[33mcommit ae43be10d7244a4b2a6d4bafc147f5468c4f01e0[m
+Author: Sumit Kumar <120784270+sumit7366@users.noreply.github.com>
+Date:   Sat Mar 14 18:09:47 2026 +0530
+
+    Update index.html
+
+[33mcommit 9894e553a8233a583ec4534b2a3aa280e97187b0[m
+Author: Sumit Kumar <120784270+sumit7366@users.noreply.github.com>
+Date:   Fri Mar 13 18:03:37 2026 +0530
+
+    Update index.html
+
+[33mcommit 0be4fc39ea9f4b5fe73d3bb71753280331dc91d0[m
+Author: Sumit Kumar <120784270+sumit7366@users.noreply.github.com>
+Date:   Fri Mar 13 18:02:45 2026 +0530
+
+    Update index.html
+
+[33mcommit 6f8addf454516ecf1d4d8d0a53cf65d6e1734240[m
+Author: Sumit Kumar <120784270+sumit7366@users.noreply.github.com>
+Date:   Fri Feb 13 00:28:23 2026 +0530
+
+    Update index.html
+
+[33mcommit 22b4c749e78902a8e28968d1e209fa9d9c799d18[m
+Author: Sumit Kumar <120784270+sumit7366@users.noreply.github.com>
+Date:   Fri Feb 6 21:28:12 2026 +0530
+
+    Update index.html
+
+[33mcommit c7f59f02e7a4642e43521180dace615a439c1b1c[m
+Author: Sumit Kumar <120784270+sumit7366@users.noreply.github.com>
+Date:   Fri Feb 6 21:24:24 2026 +0530
+
+    Update index.html
+
+[33mcommit ce5bc9bc857f2204181a0a4c159a29c17fcce5d7[m
+Author: Sumit Kumar <120784270+sumit7366@users.noreply.github.com>
+Date:   Tue Feb 3 13:01:25 2026 +0530
+
+    Update index.html
+
+[33mcommit 3126668f599d555563d83596798397af5ed9a8a1[m
+Author: Sumit Kumar <120784270+sumit7366@users.noreply.github.com>
+Date:   Tue Feb 3 12:59:16 2026 +0530
+
+    Update index.html
+
+[33mcommit caa4c94f0248aa72bd69b174340b437862ca1c6f[m
+Author: Sumit Kumar <120784270+sumit7366@users.noreply.github.com>
+Date:   Tue Feb 3 12:56:12 2026 +0530
+
+    Update index.html
+
+[33mcommit bfd0dfcc3b26ccd82e69addd8f585f32557e4034[m
+Author: Sumit Kumar <120784270+sumit7366@users.noreply.github.com>
+Date:   Tue Feb 3 12:54:59 2026 +0530
+
+    Update index.html
+
+[33mcommit 928bb7d0b83436defe8464837df7bbdb81485bca[m
+Author: Sumit Kumar <120784270+sumit7366@users.noreply.github.com>
+Date:   Mon Feb 2 23:27:28 2026 +0530
+
+    Update script.js
+
+[33mcommit 0bbea7e57264ade36ca5b66a7e10987a95679c36[m
+Author: Sumit Kumar <120784270+sumit7366@users.noreply.github.com>
+Date:   Mon Feb 2 23:02:34 2026 +0530
+
+    Update index.html
+
+[33mcommit 04b365c21bec9aa2e6d50b58d6b942aff074d0db[m
+Author: Sumit Kumar <sumitkumar@Sumits-MacBook-Air.local>
+Date:   Mon Feb 2 23:01:30 2026 +0530
+
+    first commit

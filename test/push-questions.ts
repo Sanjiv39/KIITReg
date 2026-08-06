@@ -61,7 +61,7 @@ initializeApp({
 const db = getFirestore();
 
 // Read questions from questions.json
-const questionsPath = path.join(__dirname, "../questions.json");
+const questionsPath = path.join(__dirname, "../lib/data/questions.json");
 if (!fs.existsSync(questionsPath)) {
   console.error("Error: questions.json not found in project root.");
   process.exit(1);

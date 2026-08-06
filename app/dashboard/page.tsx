@@ -143,13 +143,15 @@ export default function DashboardPage() {
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white mb-2">
               Welcome back, {userData?.displayName?.split(" ")[0]}!
             </h1>
-            <p className="text-slate-300 text-sm sm:text-base max-w-xl">
-              You're part of the K&#123;devs&#125; community. Stay updated with events, track your progress, and grow with us.
+            <p className="text-slate-300 text-sm sm:text-base max-w-xl font-medium">
+              {userData?.role?.toUpperCase() === "ADMIN"
+                ? "You have administrator privileges. You can manage settings, view registrations, and handle events."
+                : "You're part of the K{devs} community. Stay updated with events, track your progress, and grow with us."}
             </p>
           </div>
           <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm font-semibold">
             <ShieldCheck className="w-4 h-4" />
-            {userData?.role === "admin" ? "Admin" : "Active Member"}
+            {userData?.role?.toUpperCase() === "ADMIN" ? "Admin" : "Active Member"}
           </div>
         </div>
       </div>

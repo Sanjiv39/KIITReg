@@ -1,4 +1,6 @@
 import { adminDb } from "@/lib/firebase/admin";
+import fs from "fs";
+import path from "path";
 
 export interface User {
   id: string; // Firebase Auth UID
@@ -57,6 +59,22 @@ export async function getUser(uid: string): Promise<User | null> {
   };
 }
 
+function checkIfAdmin(email: string): boolean {
+  try {
+    if (!email || !email.toLowerCase().endsWith("@kiit.ac.in")) return false;
+    const prefix = email.split("@")[0].toLowerCase();
+    const adminsPath = path.join(process.cwd(), "lib/data/admins.json");
+    if (fs.existsSync(adminsPath)) {
+      const content = fs.readFileSync(adminsPath, "utf8");
+      const adminNames: string[] = JSON.parse(content);
+      return adminNames.some((name) => name.toLowerCase() === prefix);
+    }
+  } catch (err) {
+    console.error("Error reading admins.json:", err);
+  }
+  return false;
+}
+
 export async function syncUser(
   uid: string,
   data: { name: string; email: string; photoURL?: string; role?: "ADMIN" | "USER" }
@@ -65,12 +83,15 @@ export async function syncUser(
   const doc = await userRef.get();
   const nowIso = new Date().toISOString();
 
+  const isAdmin = checkIfAdmin(data.email);
+  const roleFromParams = data.role || (isAdmin ? "ADMIN" : "USER");
+
   if (!doc.exists) {
     const newUser: User = {
       id: uid,
       name: data.name,
       email: data.email,
-      role: data.role || "USER",
+      role: roleFromParams,
       photoURL: data.photoURL || "",
       createdAt: nowIso,
       lastLoginAt: nowIso,
@@ -82,12 +103,13 @@ export async function syncUser(
     const existing = doc.data();
     // Normalize role string format to uppercase
     const currentRole = existing?.role === "admin" || existing?.role === "ADMIN" ? "ADMIN" : "USER";
+    const finalRole = isAdmin ? "ADMIN" : (data.role ?? currentRole);
     const updatedUser: User = {
       id: uid,
       name: data.name ?? (existing?.displayName || existing?.name || ""),
       email: data.email ?? existing?.email ?? "",
       photoURL: data.photoURL ?? existing?.photoURL ?? "",
-      role: data.role ?? currentRole,
+      role: finalRole,
       createdAt: existing?.createdAt || nowIso,
       lastLoginAt: nowIso,
       updatedAt: nowIso,

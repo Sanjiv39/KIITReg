@@ -40,16 +40,41 @@ export default function DashboardLayout({
     displayName: string;
     email: string;
     photoURL: string;
+    role?: string;
   } | null>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
+        // Initial fallback state
         setUser({
           displayName: firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "Member",
           email: firebaseUser.email || "",
           photoURL: firebaseUser.photoURL || "",
         });
+
+        try {
+          const idToken = await firebaseUser.getIdToken();
+          const response = await fetch("/api/users/me", {
+            headers: {
+              Authorization: `Bearer ${idToken}`,
+            },
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            if (data.success && data.user) {
+              setUser({
+                displayName: data.user.displayName || data.user.name || firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "Member",
+                email: data.user.email || firebaseUser.email || "",
+                photoURL: data.user.photoURL || firebaseUser.photoURL || "",
+                role: data.user.role,
+              });
+            }
+          }
+        } catch (err) {
+          console.error("Failed to load user profile:", err);
+        }
       } else {
         setUser(null);
       }
@@ -68,7 +93,7 @@ export default function DashboardLayout({
 
       // Sync user with backend
       const idToken = await firebaseUser.getIdToken();
-      await fetch("/api/users/auth", {
+      const authRes = await fetch("/api/users/auth", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -85,10 +110,19 @@ export default function DashboardLayout({
         }),
       });
 
+      let role = "USER";
+      if (authRes.ok) {
+        const authData = await authRes.json();
+        if (authData.success && authData.user) {
+          role = authData.user.role || "USER";
+        }
+      }
+
       setUser({
         displayName: firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "Member",
         email: firebaseUser.email || "",
         photoURL: firebaseUser.photoURL || "",
+        role: role,
       });
     } catch (error: unknown) {
       const errorMessage =
@@ -161,7 +195,7 @@ export default function DashboardLayout({
                   />
                 </div>
                 <h1 className="text-2xl font-extrabold text-white mb-2">
-                  Member Dashboard
+                  K&#123;devs&#125; Dashboard
                 </h1>
                 <p className="text-slate-400 text-sm">
                   Sign in with your official KIIT email to access your dashboard
@@ -303,9 +337,14 @@ export default function DashboardLayout({
                 </div>
               )}
             </div>
-            <div className="min-w-0">
-              <p className="text-sm font-semibold text-white truncate">
-                {user?.displayName}
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold text-white truncate flex items-center gap-1.5">
+                <span>{user?.displayName}</span>
+                {user?.role === "ADMIN" && (
+                  <span className="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-[#00f2fe]/10 text-[#00f2fe] border border-[#00f2fe]/20 shrink-0">
+                    ADMIN
+                  </span>
+                )}
               </p>
               <p className="text-xs text-slate-400 truncate">{user?.email}</p>
             </div>
@@ -333,7 +372,9 @@ export default function DashboardLayout({
           </button>
 
           <div className="hidden lg:block">
-            <h2 className="text-lg font-bold text-white">Member Dashboard</h2>
+            <h2 className="text-lg font-bold text-white">
+              {user?.role === "ADMIN" ? "Admin Dashboard" : "Member Dashboard"}
+            </h2>
             <p className="text-xs text-slate-400">Welcome back, {user?.displayName}</p>
           </div>
 

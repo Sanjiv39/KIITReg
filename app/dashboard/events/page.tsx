@@ -39,12 +39,15 @@ export default function EventsPage() {
   const [filter, setFilter] = useState<"all" | "upcoming" | "completed">("all");
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [loadingQuizState, setLoadingQuizState] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         try {
           const idToken = await firebaseUser.getIdToken();
+          
+          // Fetch quiz completion state
           const response = await fetch("/api/quiz", {
             headers: {
               Authorization: `Bearer ${idToken}`,
@@ -54,8 +57,19 @@ export default function EventsPage() {
             const data = await response.json();
             setQuizCompleted(data.completed ?? false);
           }
+
+          // Fetch user role
+          const userRes = await fetch("/api/users/me", {
+            headers: {
+              Authorization: `Bearer ${idToken}`,
+            },
+          });
+          if (userRes.ok) {
+            const userData = await userRes.json();
+            setIsAdmin(userData.user?.role?.toUpperCase() === "ADMIN");
+          }
         } catch (err) {
-          console.error("Error fetching quiz state:", err);
+          console.error("Error fetching state:", err);
         }
       }
       setLoadingQuizState(false);
@@ -210,12 +224,22 @@ export default function EventsPage() {
                       Loading Quiz...
                     </div>
                   ) : (
-                    <Link
-                      href={quizCompleted ? "/dashboard/results" : "/dashboard/quiz"}
-                      className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#00f2fe] to-[#4facfe] text-slate-950 text-sm font-bold hover:shadow-[0_4px_15px_rgba(0,242,254,0.4)] transition-all"
-                    >
-                      {quizCompleted ? "Check Score" : "Attend Quiz"} <ArrowUpRight className="w-4 h-4" />
-                    </Link>
+                    <div className="flex gap-3">
+                      {isAdmin && (
+                        <Link
+                          href="/dashboard/quiz/edit"
+                          className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border border-[#00f2fe]/30 bg-[#00f2fe]/5 text-[#00f2fe] text-xs font-bold hover:bg-[#00f2fe]/10 transition-all shrink-0"
+                        >
+                          Edit Questions
+                        </Link>
+                      )}
+                      <Link
+                        href={quizCompleted ? "/dashboard/results" : "/dashboard/quiz"}
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#00f2fe] to-[#4facfe] text-slate-950 text-xs font-bold hover:shadow-[0_4px_15px_rgba(0,242,254,0.4)] transition-all"
+                      >
+                        {quizCompleted ? "Check Score" : "Attend Quiz"} <ArrowUpRight className="w-4 h-4" />
+                      </Link>
+                    </div>
                   )
                 ) : (
                   <div className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-400 text-sm font-medium">
