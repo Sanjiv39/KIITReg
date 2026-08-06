@@ -63,8 +63,12 @@ export default function QuizPage() {
 
   const fetchQuizData = async (firebaseUser: any) => {
     try {
+      const search = typeof window !== "undefined" ? window.location.search : "";
+      const params = new URLSearchParams(search);
+      const quizId = params.get("quizId") || "";
+
       const idToken = await firebaseUser.getIdToken();
-      const response = await fetch("/api/quiz", {
+      const response = await fetch(`/api/quiz?quizId=${quizId}`, {
         headers: {
           Authorization: `Bearer ${idToken}`,
         },
@@ -73,7 +77,7 @@ export default function QuizPage() {
       if (response.ok) {
         const data = await response.json();
         if (data.completed) {
-          router.replace("/dashboard/results");
+          router.replace(`/dashboard/results?quizId=${quizId}`);
         } else {
           setQuestions(data.questions || []);
         }
@@ -114,6 +118,10 @@ export default function QuizPage() {
 
     setIsSubmitting(true);
     try {
+      const search = typeof window !== "undefined" ? window.location.search : "";
+      const params = new URLSearchParams(search);
+      const quizId = params.get("quizId") || "";
+
       const idToken = await user.getIdToken();
       const response = await fetch("/api/quiz", {
         method: "POST",
@@ -121,11 +129,11 @@ export default function QuizPage() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${idToken}`,
         },
-        body: JSON.stringify({ answers }),
+        body: JSON.stringify({ answers, quizId }),
       });
 
       if (response.ok) {
-        router.replace("/dashboard/results");
+        router.replace(`/dashboard/results?quizId=${quizId}`);
       } else {
         const errData = await response.json();
         alert(errData.error || "Submission failed");

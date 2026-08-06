@@ -40,3 +40,8 @@ if (!getApps().length) {
 
 export const adminAuth = getAuth();
 export const adminDb = getFirestore();
+try {
+  adminDb.settings({ ignoreUndefinedProperties: true });
+} catch (e) {
+  // Ignore settings overwrite errors during hot-reloading in dev server
+}

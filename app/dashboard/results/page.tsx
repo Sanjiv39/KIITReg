@@ -46,8 +46,12 @@ export default function QuizResultsPage() {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         try {
+          const search = typeof window !== "undefined" ? window.location.search : "";
+          const params = new URLSearchParams(search);
+          const quizId = params.get("quizId") || "";
+
           const idToken = await firebaseUser.getIdToken();
-          const response = await fetch("/api/quiz/results", {
+          const response = await fetch(`/api/quiz/results?quizId=${quizId}`, {
             headers: {
               Authorization: `Bearer ${idToken}`,
             },
@@ -66,7 +70,7 @@ export default function QuizResultsPage() {
               });
             } else {
               // Redirect back if they haven't taken the quiz yet
-              router.replace("/dashboard/quiz");
+              router.replace(`/dashboard/quiz?quizId=${quizId}`);
             }
           } else {
             router.replace("/dashboard/events");

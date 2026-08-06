@@ -28,9 +28,11 @@ export async function GET(request: NextRequest) {
     }
 
     const { uid } = decodedToken;
+    const { searchParams } = new URL(request.url);
+    const quizId = searchParams.get("quizId") || undefined;
 
     // Check if user already took the quiz
-    const existingResult = await getUserResult(uid);
+    const existingResult = await getUserResult(uid, quizId);
     if (existingResult) {
       return NextResponse.json({
         success: true,
@@ -39,7 +41,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Otherwise fetch questions
-    const questions = await getQuestions();
+    const questions = await getQuestions(quizId);
     
     // Scrub the correct answers to prevent inspection cheats
     const clientQuestions = questions.map((q) => ({
@@ -89,8 +91,12 @@ export async function POST(request: NextRequest) {
 
     const { uid } = decodedToken;
 
+    const body = await request.json().catch(() => ({}));
+    const userAnswers: Record<string, number> = body.answers || {};
+    const quizId = body.quizId || undefined;
+
     // Check double submission
-    const existingResult = await getUserResult(uid);
+    const existingResult = await getUserResult(uid, quizId);
     if (existingResult) {
       return NextResponse.json(
         { success: false, error: "Quiz already attempted. Retakes are not allowed." },
@@ -98,11 +104,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const body = await request.json().catch(() => ({}));
-    const userAnswers: Record<string, number> = body.answers || {};
-
     // Get database questions (with correct answers)
-    const questions = await getQuestions();
+    const questions = await getQuestions(quizId);
     let score = 0;
 
     questions.forEach((q) => {
@@ -126,6 +129,7 @@ export async function POST(request: NextRequest) {
       user_email: userEmail,
       score,
       answers: userAnswers,
+      quizId,
     });
 
     return NextResponse.json({

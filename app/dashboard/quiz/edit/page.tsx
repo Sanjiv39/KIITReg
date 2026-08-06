@@ -53,8 +53,12 @@ export default function AdminEditQuizPage() {
           if (userRes.ok) {
             const userData = await userRes.json();
             if (userData.user?.role?.toUpperCase() === "ADMIN") {
-              // Load all questions
-              await fetchQuestions(idToken);
+              const search = typeof window !== "undefined" ? window.location.search : "";
+              const params = new URLSearchParams(search);
+              const quizId = params.get("quizId") || "";
+              
+              // Load questions for this quiz
+              await fetchQuestions(idToken, quizId);
             } else {
               router.replace("/dashboard");
             }
@@ -73,9 +77,9 @@ export default function AdminEditQuizPage() {
     return () => unsubscribe();
   }, [router]);
 
-  const fetchQuestions = async (token: string) => {
+  const fetchQuestions = async (token: string, qId?: string) => {
     try {
-      const response = await fetch("/api/admin/quiz", {
+      const response = await fetch(`/api/admin/quiz?quizId=${qId || ""}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -114,6 +118,10 @@ export default function AdminEditQuizPage() {
 
     setIsSaving(true);
     try {
+      const search = typeof window !== "undefined" ? window.location.search : "";
+      const params = new URLSearchParams(search);
+      const quizId = params.get("quizId") || "";
+
       const idToken = await auth.currentUser?.getIdToken();
       if (!idToken) return;
 
@@ -122,6 +130,7 @@ export default function AdminEditQuizPage() {
         text: formText.trim(),
         options: formOptions.map((o) => o.trim()),
         correct_answer: formCorrectIndex,
+        quizId,
       };
 
       const response = await fetch("/api/admin/quiz", {
@@ -134,7 +143,7 @@ export default function AdminEditQuizPage() {
       });
 
       if (response.ok) {
-        await fetchQuestions(idToken);
+        await fetchQuestions(idToken, quizId);
         setIsEditorOpen(false);
       } else {
         const errData = await response.json();
@@ -152,6 +161,10 @@ export default function AdminEditQuizPage() {
     if (!confirm("Are you sure you want to delete this question?")) return;
 
     try {
+      const search = typeof window !== "undefined" ? window.location.search : "";
+      const params = new URLSearchParams(search);
+      const quizId = params.get("quizId") || "";
+
       const idToken = await auth.currentUser?.getIdToken();
       if (!idToken) return;
 
@@ -163,7 +176,7 @@ export default function AdminEditQuizPage() {
       });
 
       if (response.ok) {
-        await fetchQuestions(idToken);
+        await fetchQuestions(idToken, quizId);
       } else {
         const errData = await response.json();
         alert(errData.error || "Failed to delete question.");

@@ -31,7 +31,10 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ success: false, error: "Unauthorized access" }, { status: 403 });
     }
 
-    const questions = await getQuestions();
+    const { searchParams } = new URL(request.url);
+    const quizId = searchParams.get("quizId") || undefined;
+
+    const questions = await getQuestions(quizId);
     return NextResponse.json({ success: true, questions });
   } catch (error: unknown) {
     const errorDetails = error instanceof Error ? error.message : "Server error";
@@ -48,7 +51,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json().catch(() => ({}));
-    const { text, options, correct_answer } = body;
+    const { text, options, correct_answer, quizId } = body;
 
     if (!text || !Array.isArray(options) || options.length !== 4 || typeof correct_answer !== "number") {
       return NextResponse.json({ success: false, error: "Invalid question structure" }, { status: 400 });
@@ -58,6 +61,7 @@ export async function POST(request: NextRequest) {
       text,
       options,
       correct_answer,
+      quizId,
     });
 
     return NextResponse.json({ success: true, question: newQuestion }, { status: 201 });
@@ -76,7 +80,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json().catch(() => ({}));
-    const { id, text, options, correct_answer } = body;
+    const { id, text, options, correct_answer, quizId } = body;
 
     if (!id || !text || !Array.isArray(options) || options.length !== 4 || typeof correct_answer !== "number") {
       return NextResponse.json({ success: false, error: "Invalid question update parameters" }, { status: 400 });
@@ -86,6 +90,7 @@ export async function PUT(request: NextRequest) {
       text,
       options,
       correct_answer,
+      quizId,
     });
 
     return NextResponse.json({ success: true });

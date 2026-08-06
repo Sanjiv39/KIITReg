@@ -24,6 +24,7 @@ export interface Question {
   text: string;
   options: string[]; // Options array
   correct_answer: number;
+  quizId?: string;
   updatedAt: string;
 }
 
@@ -35,18 +36,22 @@ export interface Result {
   score: number;
   answers?: Record<string, number>;
   completed_at: string;
+  quizId?: string;
 }
 
 export interface Event {
   id: string;
   title: string;
   date: string;
-  time: string;
-  location: string;
-  description: string;
+  startTime: string;
+  endTime: string;
+  location?: string;
+  description?: string;
   category: string;
   status: "upcoming" | "completed";
   hasQuiz: boolean;
+  link?: string;
+  quizId?: string;
   createdAt?: string;
 }
 
@@ -196,11 +201,15 @@ export async function seedQuestionsIfEmpty(): Promise<void> {
 }
 
 // --- Question CRUD ---
-export async function getQuestions(): Promise<Question[]> {
+export async function getQuestions(quizId?: string): Promise<Question[]> {
   await seedQuestionsIfEmpty();
-  const snapshot = await questionsCollection.get();
+  let query: any = questionsCollection;
+  if (quizId) {
+    query = query.where("quizId", "==", quizId);
+  }
+  const snapshot = await query.get();
   const list: Question[] = [];
-  snapshot.forEach((doc) => {
+  snapshot.forEach((doc: any) => {
     list.push({ id: doc.id, ...doc.data() } as Question);
   });
   return list;
@@ -232,8 +241,12 @@ export async function deleteQuestion(id: string): Promise<void> {
 }
 
 // --- Result CRUD ---
-export async function getUserResult(userId: string): Promise<Result | null> {
-  const snapshot = await resultsCollection.where("user_id", "==", userId).limit(1).get();
+export async function getUserResult(userId: string, quizId?: string): Promise<Result | null> {
+  let query: any = resultsCollection.where("user_id", "==", userId);
+  if (quizId) {
+    query = query.where("quizId", "==", quizId);
+  }
+  const snapshot = await query.limit(1).get();
   if (snapshot.empty) return null;
   const doc = snapshot.docs[0];
   return { id: doc.id, ...doc.data() } as Result;
@@ -269,7 +282,8 @@ export async function getEvents(): Promise<Event[]> {
     const defaultEvent = {
       title: "Web Dev Workshop",
       date: "Aug 05, 2026",
-      time: "2:00 PM - 5:00 PM",
+      startTime: "02:00 PM",
+      endTime: "05:00 PM",
       location: "Lab 3, Block C",
       description: "Hands-on workshop covering modern web development with React and Next.js.",
       category: "Workshop",
@@ -289,14 +303,29 @@ export async function getEvents(): Promise<Event[]> {
 }
 
 export async function addEvent(data: Omit<Event, "id">): Promise<Event> {
-  const docRef = await eventsCollection.add({
+  const docRef = eventsCollection.doc();
+  const id = docRef.id;
+  
+  const eventData = {
     ...data,
+    quizId: data.category.toUpperCase() === "QUIZ" ? id : data.quizId,
     createdAt: new Date().toISOString(),
-  });
-  return {
-    id: docRef.id,
-    ...data,
   };
+
+  await docRef.set(eventData);
+
+  return {
+    id,
+    ...eventData,
+  } as Event;
+}
+
+export async function updateEvent(id: string, data: Partial<Omit<Event, "id" | "createdAt">>): Promise<void> {
+  await eventsCollection.doc(id).update(data);
+}
+
+export async function deleteEvent(id: string): Promise<void> {
+  await eventsCollection.doc(id).delete();
 }
 
 // --- Registrations CRUD ---

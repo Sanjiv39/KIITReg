@@ -75,9 +75,14 @@ interface JsonQuestion {
 
 const questions: JsonQuestion[] = JSON.parse(fs.readFileSync(questionsPath, "utf8"));
 
-type PushOpts = { fresh: boolean };
+type PushOpts = { fresh: boolean; quizId: string };
 async function pushQuestions(opts: Partial<PushOpts> = {}): Promise<void> {
   const collection = db.collection("questions");
+
+  if (!opts?.quizId) {
+    console.error("Error: Missing quizId in options.");
+    process.exit(1);
+  }
 
   if (opts?.fresh) {
     console.log("Option --fresh detected. Clearing existing questions...");
@@ -107,6 +112,7 @@ async function pushQuestions(opts: Partial<PushOpts> = {}): Promise<void> {
     const docData = {
       text: q.text,
       options: q.options,
+      quizId: opts.quizId,
       correct_answer: q.correct_answer,
       updatedAt: nowIso
     };
@@ -120,7 +126,7 @@ async function pushQuestions(opts: Partial<PushOpts> = {}): Promise<void> {
 
 const isFresh = true
 
-pushQuestions({ fresh: isFresh }).catch((err: unknown) => {
+pushQuestions({ fresh: isFresh, quizId: "GtgXvB2C8HRnaheUiObP" }).catch((err: unknown) => {
   console.error("Script failed with error:", err);
   process.exit(1);
 });

@@ -28,10 +28,12 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const { uid } = decodedToken;
+        const { uid } = decodedToken;
+    const { searchParams } = new URL(request.url);
+    const quizId = searchParams.get("quizId") || undefined;
 
     // Verify user has completed the quiz
-    const existingResult = await getUserResult(uid);
+    const existingResult = await getUserResult(uid, quizId);
     if (!existingResult) {
       return NextResponse.json(
         { success: false, error: "Access Denied: Quiz not completed yet" },
@@ -40,7 +42,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Since they completed the quiz, return questions with correct_answers
-    const questions = await getQuestions();
+    const questions = await getQuestions(quizId);
 
     return NextResponse.json({
       success: true,
