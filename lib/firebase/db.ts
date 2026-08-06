@@ -37,10 +37,32 @@ export interface Result {
   completed_at: string;
 }
 
+export interface Event {
+  id: string;
+  title: string;
+  date: string;
+  time: string;
+  location: string;
+  description: string;
+  category: string;
+  status: "upcoming" | "completed";
+  hasQuiz: boolean;
+  createdAt?: string;
+}
+
+export interface Registration {
+  id: string;
+  userId: string;
+  eventId: string;
+  registeredAt: string;
+}
+
 const usersCollection = adminDb.collection("users");
 const settingsCollection = adminDb.collection("settings");
 const questionsCollection = adminDb.collection("questions");
 const resultsCollection = adminDb.collection("results");
+const eventsCollection = adminDb.collection("events");
+const registrationsCollection = adminDb.collection("registrations");
 
 // --- User CRUD ---
 export async function getUser(uid: string): Promise<User | null> {
@@ -237,4 +259,62 @@ export async function getAllResults(): Promise<Result[]> {
     list.push({ id: doc.id, ...doc.data() } as Result);
   });
   return list;
+}
+
+// --- Events CRUD ---
+export async function getEvents(): Promise<Event[]> {
+  const snapshot = await eventsCollection.get();
+  if (snapshot.empty) {
+    // Seed default completed event
+    const defaultEvent = {
+      title: "Web Dev Workshop",
+      date: "Aug 05, 2026",
+      time: "2:00 PM - 5:00 PM",
+      location: "Lab 3, Block C",
+      description: "Hands-on workshop covering modern web development with React and Next.js.",
+      category: "Workshop",
+      status: "completed" as const,
+      hasQuiz: true,
+      createdAt: new Date().toISOString(),
+    };
+    const docRef = await eventsCollection.add(defaultEvent);
+    return [{ id: docRef.id, ...defaultEvent }];
+  }
+
+  const list: Event[] = [];
+  snapshot.forEach((doc) => {
+    list.push({ id: doc.id, ...doc.data() } as Event);
+  });
+  return list;
+}
+
+export async function addEvent(data: Omit<Event, "id">): Promise<Event> {
+  const docRef = await eventsCollection.add({
+    ...data,
+    createdAt: new Date().toISOString(),
+  });
+  return {
+    id: docRef.id,
+    ...data,
+  };
+}
+
+// --- Registrations CRUD ---
+export async function getUserRegistrations(userId: string): Promise<string[]> {
+  const snapshot = await registrationsCollection.where("userId", "==", userId).get();
+  const list: string[] = [];
+  snapshot.forEach((doc) => {
+    const reg = doc.data();
+    if (reg.eventId) list.push(reg.eventId);
+  });
+  return list;
+}
+
+export async function registerUserForEvent(userId: string, eventId: string): Promise<void> {
+  const id = `${userId}_${eventId}`;
+  await registrationsCollection.doc(id).set({
+    userId,
+    eventId,
+    registeredAt: new Date().toISOString(),
+  });
 }
