@@ -25,7 +25,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 
@@ -47,7 +51,9 @@ export default function EventsPage() {
   const [loadingEvents, setLoadingEvents] = useState(true);
 
   // States to track completions for individual quizzes
-  const [completedQuizzes, setCompletedQuizzes] = useState<Record<string, boolean>>({});
+  const [completedQuizzes, setCompletedQuizzes] = useState<
+    Record<string, boolean>
+  >({});
   const [loadingQuizState, setLoadingQuizState] = useState(true);
 
   // Modal / Form States
@@ -105,7 +111,10 @@ export default function EventsPage() {
                 quizStatuses[ev.quizId] = quizData.completed ?? false;
               }
             } catch (err) {
-              console.error(`Failed to fetch quiz completion state for ${ev.quizId}:`, err);
+              console.error(
+                `Failed to fetch quiz completion state for ${ev.quizId}:`,
+                err,
+              );
             }
           }
         }
@@ -246,7 +255,12 @@ export default function EventsPage() {
   };
 
   const handleDeleteEvent = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this event? This action cannot be undone.")) return;
+    if (
+      !confirm(
+        "Are you sure you want to delete this event? This action cannot be undone.",
+      )
+    )
+      return;
 
     try {
       const firebaseUser = auth.currentUser;
@@ -302,9 +316,15 @@ export default function EventsPage() {
         date: formattedDate,
         startTime: formattedStartTime,
         endTime: formattedEndTime,
-        location: eventCategory === "Workshop" ? undefined : (eventLocation?.trim() || undefined),
+        location:
+          eventCategory === "Workshop"
+            ? undefined
+            : eventLocation?.trim() || undefined,
         description: eventDescription?.trim() || undefined,
-        link: eventCategory === "Workshop" ? eventLink?.trim() || undefined : undefined,
+        link:
+          eventCategory === "Workshop"
+            ? eventLink?.trim() || undefined
+            : undefined,
       };
 
       const res = await fetch("/api/events", {
@@ -368,7 +388,9 @@ export default function EventsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">Events</h1>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
+            Events
+          </h1>
           <p className="text-slate-400 text-sm mt-1">
             Discover and register for upcoming K&#123;devs&#125; events
           </p>
@@ -390,10 +412,11 @@ export default function EventsPage() {
             <button
               key={f}
               onClick={() => setFilter(f)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${filter === f
-                ? "bg-gradient-to-r from-[#00f2fe] to-[#4facfe] text-slate-950 font-semibold"
-                : "bg-white/5 text-slate-300 border border-white/10 hover:bg-white/10"
-                }`}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                filter === f
+                  ? "bg-gradient-to-r from-[#00f2fe] to-[#4facfe] text-slate-950 font-semibold"
+                  : "bg-white/5 text-slate-300 border border-white/10 hover:bg-white/10"
+              }`}
             >
               {f.charAt(0).toUpperCase() + f.slice(1)}
             </button>
@@ -417,10 +440,11 @@ export default function EventsPage() {
           <button
             key={cat}
             onClick={() => setActiveCategory(cat)}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${activeCategory === cat
-              ? "bg-[#00f2fe]/20 text-[#00f2fe] border border-[#00f2fe]/30"
-              : "bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10 hover:text-white"
-              }`}
+            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+              activeCategory === cat
+                ? "bg-[#00f2fe]/20 text-[#00f2fe] border border-[#00f2fe]/30"
+                : "bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10 hover:text-white"
+            }`}
           >
             {cat}
           </button>
@@ -431,7 +455,9 @@ export default function EventsPage() {
       {loadingEvents ? (
         <div className="flex flex-col items-center justify-center py-20 gap-3">
           <div className="w-8 h-8 rounded-full border-2 border-[#00f2fe]/30 border-t-[#00f2fe] animate-spin" />
-          <p className="text-slate-400 text-xs font-medium">Loading events database...</p>
+          <p className="text-slate-400 text-xs font-medium">
+            Loading events database...
+          </p>
         </div>
       ) : filteredEvents.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -456,10 +482,11 @@ export default function EventsPage() {
                     <div className="flex items-center gap-2">
                       {/* Status badge */}
                       <span
-                        className={`px-2.5 py-1 rounded-full text-[10px] font-semibold ${event.status === "upcoming"
-                          ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                          : "bg-slate-500/10 text-slate-400 border border-slate-500/20"
-                          }`}
+                        className={`px-2.5 py-1 rounded-full text-[10px] font-semibold ${
+                          event.status === "upcoming"
+                            ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                            : "bg-slate-500/10 text-slate-400 border border-slate-500/20"
+                        }`}
                       >
                         {event.status === "upcoming" ? "Upcoming" : "Completed"}
                       </span>
@@ -529,7 +556,8 @@ export default function EventsPage() {
                         {event.status === "upcoming" ? (
                           event.registered ? (
                             <div className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold">
-                              <CheckCircle2 className="w-3.5 h-3.5" /> Registered
+                              <CheckCircle2 className="w-3.5 h-3.5" />{" "}
+                              Registered
                             </div>
                           ) : (
                             <button
@@ -548,60 +576,61 @@ export default function EventsPage() {
                             }
                             className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-gradient-to-r from-[#00f2fe] to-[#4facfe] text-slate-950 text-xs font-bold hover:shadow-[0_4px_15px_rgba(0,242,254,0.4)] transition-all text-center"
                           >
-                            {isQuizCompleted ? "Check Score" : "Attend Quiz"} <ArrowUpRight className="w-3.5 h-3.5" />
+                            {isQuizCompleted ? "Check Score" : "Attend Quiz"}{" "}
+                            <ArrowUpRight className="w-3.5 h-3.5" />
                           </Link>
                         )}
                       </div>
-                    ) : (
-                      event.status === "upcoming" ? (
-                        event.registered ? (
-                          <div className="flex flex-col gap-2 w-full">
-                            <div className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm font-semibold">
-                              <CheckCircle2 className="w-4 h-4" />
-                              Registered
-                            </div>
-                            {isWorkshop && event.link && (
-                              <a
-                                href={event.link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-xs font-bold hover:shadow-[0_4px_15px_rgba(99,102,241,0.4)] transition-all animate-pulse"
-                              >
-                                <Video className="w-4 h-4" /> Join Google Meet <ArrowUpRight className="w-3.5 h-3.5" />
-                              </a>
-                            )}
+                    ) : event.status === "upcoming" ? (
+                      event.registered ? (
+                        <div className="flex flex-col gap-2 w-full">
+                          <div className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm font-semibold">
+                            <CheckCircle2 className="w-4 h-4" />
+                            Registered
                           </div>
-                        ) : (
-                          <button
-                            onClick={() => handleRegister(event.id)}
-                            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#00f2fe] to-[#4facfe] text-slate-950 text-sm font-bold hover:shadow-[0_4px_15px_rgba(0,242,254,0.4)] transition-all"
-                          >
-                            Register Now <ArrowUpRight className="w-4 h-4" />
-                          </button>
-                        )
-                      ) : isQuiz ? (
-                        loadingQuizState ? (
-                          <div className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-400 text-sm font-medium">
-                            Loading Quiz...
-                          </div>
-                        ) : (
-                          <Link
-                            href={
-                              isQuizCompleted
-                                ? `/dashboard/results?quizId=${quizIdKey}`
-                                : `/dashboard/quiz?quizId=${quizIdKey}`
-                            }
-                            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#00f2fe] to-[#4facfe] text-slate-950 text-sm font-bold hover:shadow-[0_4px_15px_rgba(0,242,254,0.4)] transition-all text-center"
-                          >
-                            {isQuizCompleted ? "Check Score" : "Attend Quiz"} <ArrowUpRight className="w-4 h-4" />
-                          </Link>
-                        )
-                      ) : (
-                        <div className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-400 text-sm font-medium">
-                          <XCircle className="w-4 h-4" />
-                          Event Completed
+                          {isWorkshop && event.link && (
+                            <a
+                              href={event.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-xs font-bold hover:shadow-[0_4px_15px_rgba(99,102,241,0.4)] transition-all animate-pulse"
+                            >
+                              <Video className="w-4 h-4" /> Join Google Meet{" "}
+                              <ArrowUpRight className="w-3.5 h-3.5" />
+                            </a>
+                          )}
                         </div>
+                      ) : (
+                        <button
+                          onClick={() => handleRegister(event.id)}
+                          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#00f2fe] to-[#4facfe] text-slate-950 text-sm font-bold hover:shadow-[0_4px_15px_rgba(0,242,254,0.4)] transition-all"
+                        >
+                          Register Now <ArrowUpRight className="w-4 h-4" />
+                        </button>
                       )
+                    ) : isQuiz ? (
+                      loadingQuizState ? (
+                        <div className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-400 text-sm font-medium">
+                          Loading Quiz...
+                        </div>
+                      ) : (
+                        <Link
+                          href={
+                            isQuizCompleted
+                              ? `/dashboard/results?quizId=${quizIdKey}`
+                              : `/dashboard/quiz?quizId=${quizIdKey}`
+                          }
+                          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#00f2fe] to-[#4facfe] text-slate-950 text-sm font-bold hover:shadow-[0_4px_15px_rgba(0,242,254,0.4)] transition-all text-center"
+                        >
+                          {isQuizCompleted ? "Check Score" : "Attend Quiz"}{" "}
+                          <ArrowUpRight className="w-4 h-4" />
+                        </Link>
+                      )
+                    ) : (
+                      <div className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-400 text-sm font-medium">
+                        <XCircle className="w-4 h-4" />
+                        Event Completed
+                      </div>
                     )}
 
                     {/* Admin only: Registered Users review navigation */}
@@ -610,7 +639,8 @@ export default function EventsPage() {
                         href={`/dashboard/registered-users?eventId=${event.id}`}
                         className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-white/10 bg-slate-950 text-slate-300 text-xs font-bold hover:bg-white/5 hover:text-white transition-all text-center"
                       >
-                        Registered Users <ArrowUpRight className="w-3.5 h-3.5" />
+                        Registered Users{" "}
+                        <ArrowUpRight className="w-3.5 h-3.5" />
                       </Link>
                     )}
                   </div>
@@ -651,24 +681,29 @@ export default function EventsPage() {
             {/* Form */}
             <form onSubmit={handleSubmitEvent} className="p-6 space-y-4">
               <div className="grid grid-cols-2 gap-4">
-
                 {/* Event Type / Category */}
                 <div className="col-span-2 space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-300">Event Type</label>
+                  <label className="text-xs font-semibold text-slate-300">
+                    Event Type
+                  </label>
                   <select
                     value={eventCategory}
                     onChange={(e) => setEventCategory(e.target.value)}
                     disabled={!!editingEventId}
                     className="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-sm text-white focus:outline-none focus:border-[#00f2fe] disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <option value="Workshop">Workshop (Meeting link required)</option>
+                    <option value="Workshop">
+                      Workshop (Meeting link required)
+                    </option>
                     <option value="Quiz">Quiz</option>
                   </select>
                 </div>
 
                 {/* Title */}
                 <div className="col-span-2 space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-300">Event Title</label>
+                  <label className="text-xs font-semibold text-slate-300">
+                    Event Title
+                  </label>
                   <input
                     type="text"
                     value={eventTitle}
@@ -681,7 +716,9 @@ export default function EventsPage() {
 
                 {/* Date Picker using Shadcn reference */}
                 <div className="col-span-2 space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-300 block">Date</label>
+                  <label className="text-xs font-semibold text-slate-300 block">
+                    Date
+                  </label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
@@ -689,11 +726,15 @@ export default function EventsPage() {
                         type="button"
                         className={cn(
                           "w-full justify-start text-left font-normal border-white/10 bg-white/5 text-white hover:bg-white/10 hover:text-white px-3.5 py-2 rounded-xl h-10",
-                          !eventDate && "text-slate-500"
+                          !eventDate && "text-slate-500",
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4 text-[#00f2fe]" />
-                        {eventDate && !isNaN(eventDate.getTime()) ? format(eventDate, "PPP") : <span>Pick a date</span>}
+                        {eventDate && !isNaN(eventDate.getTime()) ? (
+                          format(eventDate, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
@@ -701,7 +742,7 @@ export default function EventsPage() {
                         mode="single"
                         selected={eventDate}
                         onSelect={setEventDate}
-                        initialFocus
+                        // initialFocus
                       />
                     </PopoverContent>
                   </Popover>
@@ -709,15 +750,21 @@ export default function EventsPage() {
 
                 {/* Start Time Selectors */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-300 block">Start Time</label>
+                  <label className="text-xs font-semibold text-slate-300 block">
+                    Start Time
+                  </label>
                   <div className="flex items-center gap-1">
                     <select
                       value={startHour}
                       onChange={(e) => setStartHour(e.target.value)}
                       className="flex-1 rounded-xl border border-white/10 bg-slate-900 px-2 py-2 text-sm text-white focus:outline-none focus:border-[#00f2fe]"
                     >
-                      {Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, "0")).map((h) => (
-                        <option key={h} value={h}>{h}</option>
+                      {Array.from({ length: 12 }, (_, i) =>
+                        String(i + 1).padStart(2, "0"),
+                      ).map((h) => (
+                        <option key={h} value={h}>
+                          {h}
+                        </option>
                       ))}
                     </select>
                     <span className="text-white text-xs font-bold">:</span>
@@ -727,7 +774,9 @@ export default function EventsPage() {
                       className="flex-1 rounded-xl border border-white/10 bg-slate-900 px-2 py-2 text-sm text-white focus:outline-none focus:border-[#00f2fe]"
                     >
                       {["00", "15", "30", "45"].map((m) => (
-                        <option key={m} value={m}>{m}</option>
+                        <option key={m} value={m}>
+                          {m}
+                        </option>
                       ))}
                     </select>
                     <select
@@ -743,15 +792,21 @@ export default function EventsPage() {
 
                 {/* End Time Selectors */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-300 block">End Time</label>
+                  <label className="text-xs font-semibold text-slate-300 block">
+                    End Time
+                  </label>
                   <div className="flex items-center gap-1">
                     <select
                       value={endHour}
                       onChange={(e) => setEndHour(e.target.value)}
                       className="flex-1 rounded-xl border border-white/10 bg-slate-900 px-2 py-2 text-sm text-white focus:outline-none focus:border-[#00f2fe]"
                     >
-                      {Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, "0")).map((h) => (
-                        <option key={h} value={h}>{h}</option>
+                      {Array.from({ length: 12 }, (_, i) =>
+                        String(i + 1).padStart(2, "0"),
+                      ).map((h) => (
+                        <option key={h} value={h}>
+                          {h}
+                        </option>
                       ))}
                     </select>
                     <span className="text-white text-xs font-bold">:</span>
@@ -761,7 +816,9 @@ export default function EventsPage() {
                       className="flex-1 rounded-xl border border-white/10 bg-slate-900 px-2 py-2 text-sm text-white focus:outline-none focus:border-[#00f2fe]"
                     >
                       {["00", "15", "30", "45"].map((m) => (
-                        <option key={m} value={m}>{m}</option>
+                        <option key={m} value={m}>
+                          {m}
+                        </option>
                       ))}
                     </select>
                     <select
@@ -778,7 +835,9 @@ export default function EventsPage() {
                 {/* Conditional Google Meet Link for Workshops */}
                 {eventCategory === "Workshop" && (
                   <div className="col-span-2 space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-300">Google Meet Link</label>
+                    <label className="text-xs font-semibold text-slate-300">
+                      Google Meet Link
+                    </label>
                     <input
                       type="url"
                       value={eventLink}
@@ -793,7 +852,9 @@ export default function EventsPage() {
                 {/* Location */}
                 {eventCategory !== "Workshop" && (
                   <div className="col-span-2 space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-300">Location</label>
+                    <label className="text-xs font-semibold text-slate-300">
+                      Location
+                    </label>
                     <input
                       type="text"
                       value={eventLocation}
@@ -806,7 +867,9 @@ export default function EventsPage() {
 
                 {/* Description */}
                 <div className="col-span-2 space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-300">Description</label>
+                  <label className="text-xs font-semibold text-slate-300">
+                    Description
+                  </label>
                   <textarea
                     value={eventDescription}
                     onChange={(e) => setEventDescription(e.target.value)}
@@ -815,7 +878,6 @@ export default function EventsPage() {
                     className="w-full rounded-xl border border-white/10 bg-white/5 p-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#00f2fe] focus:ring-1 focus:ring-[#00f2fe] resize-none"
                   />
                 </div>
-
               </div>
 
               {/* Footer */}
@@ -834,7 +896,11 @@ export default function EventsPage() {
                   className="bg-gradient-to-r from-[#00f2fe] to-[#4facfe] text-slate-950 font-bold hover:shadow-[0_4px_15px_rgba(0,242,254,0.4)] px-5"
                 >
                   <Save className="w-3.5 h-3.5 mr-1.5" />
-                  {isSaving ? "Saving..." : editingEventId ? "Update Event" : "Add Event"}
+                  {isSaving
+                    ? "Saving..."
+                    : editingEventId
+                      ? "Update Event"
+                      : "Add Event"}
                 </Button>
               </div>
             </form>
