@@ -47,7 +47,7 @@ export default function QuizResultsPage() {
       if (firebaseUser) {
         try {
           const idToken = await firebaseUser.getIdToken();
-          const response = await fetch("/api/quiz", {
+          const response = await fetch("/api/quiz/results", {
             headers: {
               Authorization: `Bearer ${idToken}`,
             },

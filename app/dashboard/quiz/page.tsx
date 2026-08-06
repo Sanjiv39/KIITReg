@@ -73,13 +73,7 @@ export default function QuizPage() {
       if (response.ok) {
         const data = await response.json();
         if (data.completed) {
-          setQuizCompleted(true);
-          const totalQ = data.totalQuestions || 10;
-          setScoreResult({
-            score: data.result.score,
-            totalQuestions: totalQ,
-            passed: data.result.score >= Math.ceil(totalQ * 0.6),
-          });
+          router.replace("/dashboard/results");
         } else {
           setQuestions(data.questions || []);
         }
@@ -131,13 +125,7 @@ export default function QuizPage() {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        setScoreResult({
-          score: data.score,
-          totalQuestions: data.totalQuestions,
-          passed: data.passed,
-        });
-        setQuizCompleted(true);
+        router.replace("/dashboard/results");
       } else {
         const errData = await response.json();
         alert(errData.error || "Submission failed");
@@ -159,74 +147,12 @@ export default function QuizPage() {
     );
   }
 
-  // --- RENDERING STATE: COMPLETED ---
-  if (quizCompleted && scoreResult) {
+  // --- RENDERING STATE: COMPLETED (Redirecting...) ---
+  if (quizCompleted) {
     return (
-      <div className="max-w-2xl mx-auto space-y-8">
-        <div className="flex items-center gap-2">
-          <Link
-            href="/dashboard/events"
-            className="flex items-center gap-2 text-xs text-slate-400 hover:text-white transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" /> Back to Events
-          </Link>
-        </div>
-
-        <div className="p-8 rounded-2xl bg-slate-900/60 border border-white/10 shadow-2xl backdrop-blur-xl text-center space-y-6">
-          <div className="relative w-24 h-24 mx-auto flex items-center justify-center rounded-full bg-white/5 border border-white/10">
-            {scoreResult.passed ? (
-              <Trophy className="w-12 h-12 text-amber-400 drop-shadow-[0_0_15px_rgba(245,158,11,0.5)]" />
-            ) : (
-              <XCircle className="w-12 h-12 text-red-500 drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]" />
-            )}
-          </div>
-
-          <div>
-            <h1 className="text-3xl font-extrabold text-white">Quiz Completed</h1>
-            <p className="text-slate-400 text-sm mt-1.5">
-              {scoreResult.passed
-                ? "Congratulations! You have successfully passed the quiz."
-                : "You did not meet the passing threshold (60%+)."}
-            </p>
-          </div>
-
-          {/* Score Counter */}
-          <div className="py-5 px-6 rounded-xl bg-white/5 border border-white/10 max-w-xs mx-auto">
-            <div className="text-xs text-slate-400 uppercase tracking-wider mb-1 font-semibold">Your Score</div>
-            <div className="text-4xl font-extrabold text-white">
-              <span className={scoreResult.passed ? "text-emerald-400" : "text-red-400"}>
-                {scoreResult.score}
-              </span>{" "}
-              / {scoreResult.totalQuestions}
-            </div>
-            <div className="text-xs text-slate-500 mt-1">
-              Passing requirement: {Math.ceil(scoreResult.totalQuestions * 0.6)} / {scoreResult.totalQuestions} questions
-            </div>
-          </div>
-
-          {/* Certificate Download */}
-          <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm max-w-md mx-auto space-y-3">
-            <div className="flex items-center gap-2 justify-center font-bold">
-              <Award className="w-5 h-5" />
-              <span>Certificate Available!</span>
-            </div>
-            <p className="text-xs text-emerald-300/80">
-              You can now download your digital certificate of completion.
-            </p>
-            <Button size="sm" variant="default" className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6">
-              Download Certificate (PDF)
-            </Button>
-          </div>
-
-          <div className="pt-4 flex flex-col sm:flex-row gap-3 justify-center">
-            <Button asChild variant="outline" className="px-6 border-[#00f2fe]/20 text-[#00f2fe] hover:bg-[#00f2fe]/10">
-              <Link href="/dashboard/results">Detailed Question Review</Link>
-            </Button>
-            <Button asChild variant="secondary" className="px-6">
-              <Link href="/dashboard/events">Return to Events</Link>
-            </Button>
-          </div>
-        </div>
+      <div className="flex flex-col items-center justify-center py-32 gap-4">
+        <div className="w-10 h-10 rounded-full border-2 border-[#00f2fe]/30 border-t-[#00f2fe] animate-spin" />
+        <p className="text-slate-400 text-sm font-medium animate-pulse">Redirecting to results...</p>
       </div>
     );
   }

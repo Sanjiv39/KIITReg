@@ -32,12 +32,9 @@ export async function GET(request: NextRequest) {
     // Check if user already took the quiz
     const existingResult = await getUserResult(uid);
     if (existingResult) {
-      const questions = await getQuestions();
       return NextResponse.json({
         success: true,
         completed: true,
-        result: existingResult,
-        totalQuestions: questions.length,
       });
     }
 
