@@ -1,11 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { auth, googleProvider } from "@/lib/firebase/config";
-import { onAuthStateChanged, signOut, signInWithPopup } from "firebase/auth";
+import {
+  onAuthStateChanged,
+  signOut,
+  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
+  type User as FirebaseUser,
+} from "firebase/auth";
 import {
   LayoutDashboard,
   User,
@@ -54,6 +61,7 @@ export default function DashboardLayout({
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSigningIn, setIsSigningIn] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -120,14 +128,42 @@ export default function DashboardLayout({
     return () => unsubscribe();
   }, []);
 
-  const handleGoogleSignIn = async () => {
-    setIsSigningIn(true);
-    setAuthError(null);
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const firebaseUser = result.user;
+  const getAuthErrorMessage = (error: unknown): string => {
+    if (error instanceof Error) {
+      const code = (error as { code?: string }).code;
+      switch (code) {
+        case "auth/popup-blocked":
+          return "Popup was blocked by your browser. Redirecting to Google sign-in...";
+        case "auth/popup-closed-by-user":
+          return "Sign-in popup was closed before completing. Please try again.";
+        case "auth/cancelled-popup-request":
+          return "Sign-in was cancelled. Please try again.";
+        case "auth/unauthorized-domain":
+          return "This domain is not authorized for sign-in. Please contact the administrator.";
+        case "auth/operation-not-supported-in-this-environment":
+          return "Popup sign-in is not supported in this environment. Redirecting to Google sign-in...";
+        case "auth/account-exists-with-different-credential":
+          return "An account already exists with the same email but a different sign-in method.";
+        case "auth/network-request-failed":
+          return "Network error. Please check your connection and try again.";
+        case "auth/too-many-requests":
+          return "Too many sign-in attempts. Please try again later.";
+        default:
+          return error.message || "Sign in failed";
+      }
+    }
+    return "Sign in failed";
+  };
 
-      // Sync user with backend
+  const syncUserWithBackend = useCallback(async (firebaseUser: FirebaseUser) => {
+    // Initial fallback state
+    setUser({
+      displayName: firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "Member",
+      email: firebaseUser.email || "",
+      photoURL: firebaseUser.photoURL || "",
+    });
+
+    try {
       const idToken = await firebaseUser.getIdToken();
       const authRes = await fetch("/api/users/auth", {
         method: "POST",
@@ -160,10 +196,58 @@ export default function DashboardLayout({
         photoURL: firebaseUser.photoURL || "",
         role: role,
       });
+    } catch (err) {
+      console.error("Failed to sync user with backend:", err);
+    }
+  }, []);
+
+  // Handle result from redirect-based sign-in (fallback when popup is blocked/unavailable)
+  useEffect(() => {
+    getRedirectResult(auth)
+      .then(async (result) => {
+        if (result?.user) {
+          await syncUserWithBackend(result.user);
+        }
+      })
+      .catch((error) => {
+        console.error("Redirect sign-in error:", error);
+        setAuthError(getAuthErrorMessage(error));
+      });
+  }, [syncUserWithBackend]);
+
+  const handleGoogleSignIn = async () => {
+    setIsSigningIn(true);
+    setAuthError(null);
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      await syncUserWithBackend(result.user);
     } catch (error: unknown) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Sign in failed";
-      setAuthError(errorMessage);
+      const code = (error as { code?: string })?.code;
+      const popupBlockedCodes = [
+        "auth/popup-blocked",
+        "auth/operation-not-supported-in-this-environment",
+        "auth/unauthorized-domain",
+      ];
+
+      if (popupBlockedCodes.includes(code || "")) {
+        // Fall back to redirect-based sign-in when popup is blocked/unavailable
+        setIsRedirecting(true);
+        setAuthError(
+          code === "auth/unauthorized-domain"
+            ? "This domain is not authorized for popup sign-in. Redirecting to Google sign-in..."
+            : "Popup was blocked by your browser. Redirecting to Google sign-in..."
+        );
+        try {
+          await signInWithRedirect(auth, googleProvider);
+          // Page will redirect to Google; result is handled by getRedirectResult on return
+        } catch (redirectError) {
+          console.error("Redirect sign-in error:", redirectError);
+          setAuthError(getAuthErrorMessage(redirectError));
+          setIsRedirecting(false);
+        }
+      } else {
+        setAuthError(getAuthErrorMessage(error));
+      }
     } finally {
       setIsSigningIn(false);
     }
@@ -239,20 +323,26 @@ export default function DashboardLayout({
               </div>
 
               {authError && (
-                <div className="mb-6 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
+                <div
+                  className={`mb-6 px-4 py-3 rounded-xl text-sm ${
+                    isRedirecting
+                      ? "bg-[#00f2fe]/10 border border-[#00f2fe]/30 text-[#00f2fe]"
+                      : "bg-red-500/10 border border-red-500/30 text-red-400"
+                  }`}
+                >
                   {authError}
                 </div>
               )}
 
               <button
                 onClick={handleGoogleSignIn}
-                disabled={isSigningIn}
+                disabled={isSigningIn || isRedirecting}
                 className="w-full flex items-center justify-center gap-3 px-4 py-3.5 rounded-xl bg-white text-slate-900 font-semibold text-sm hover:bg-slate-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isSigningIn ? (
+                {isSigningIn || isRedirecting ? (
                   <>
                     <div className="w-5 h-5 rounded-full border-2 border-slate-900/30 border-t-slate-900 animate-spin" />
-                    Signing in...
+                    {isRedirecting ? "Redirecting to Google..." : "Signing in..."}
                   </>
                 ) : (
                   <>
