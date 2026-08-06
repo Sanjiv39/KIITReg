@@ -17,12 +17,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-interface Question {
-  id: string;
-  text: string;
-  options: string[];
-  correct_answer: number;
-}
+import { Question } from "@/lib/firebase/db";
 
 export default function AdminEditQuizPage() {
   const router = useRouter();

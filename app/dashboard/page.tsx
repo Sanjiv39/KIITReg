@@ -37,15 +37,7 @@ const STATS = [
   { label: "Quiz Attended", value: "2", icon: Award, color: "text-amber-400" },
 ];
 
-const UPCOMING_WORKSHOPS_QUIZZES = [
-  {
-    title: "Web Dev Workshop",
-    date: "Aug 22, 2026",
-    time: "2:00 PM",
-    location: "Lab 3, Block C",
-    status: "Upcoming",
-  },
-];
+const UPCOMING_WORKSHOPS_QUIZZES: any[] = [];
 
 export default function DashboardPage() {
   const [userData, setUserData] = useState<UserData | null>(null);
@@ -195,29 +187,35 @@ export default function DashboardPage() {
             </Link>
           </div>
           <div className="divide-y divide-white/5">
-            {UPCOMING_WORKSHOPS_QUIZZES.map((item) => (
-              <div key={item.title} className="px-6 py-4 hover:bg-white/5 transition-colors">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="min-w-0">
-                    <h3 className="font-semibold text-white text-sm mb-1">{item.title}</h3>
-                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-400">
-                      <span className="flex items-center gap-1">
-                        <CalendarDays className="w-3 h-3" /> {item.date}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-3 h-3" /> {item.time}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Users className="w-3 h-3" /> {item.location}
-                      </span>
+            {UPCOMING_WORKSHOPS_QUIZZES.length > 0 ? (
+              UPCOMING_WORKSHOPS_QUIZZES.map((item) => (
+                <div key={item.title} className="px-6 py-4 hover:bg-white/5 transition-colors">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="min-w-0">
+                      <h3 className="font-semibold text-white text-sm mb-1">{item.title}</h3>
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-400">
+                        <span className="flex items-center gap-1">
+                          <CalendarDays className="w-3 h-3" /> {item.date}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Clock className="w-3 h-3" /> {item.time}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Users className="w-3 h-3" /> {item.location}
+                        </span>
+                      </div>
                     </div>
+                    <span className="shrink-0 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-[#00f2fe]/10 text-[#00f2fe] border border-[#00f2fe]/20">
+                      {item.status}
+                    </span>
                   </div>
-                  <span className="shrink-0 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-[#00f2fe]/10 text-[#00f2fe] border border-[#00f2fe]/20">
-                    {item.status}
-                  </span>
                 </div>
+              ))
+            ) : (
+              <div className="px-6 py-8 text-center text-slate-500 text-sm">
+                No upcoming events scheduled. Check back later!
               </div>
-            ))}
+            )}
           </div>
         </div>
       </div>

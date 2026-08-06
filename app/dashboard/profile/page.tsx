@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { auth } from "@/lib/firebase/config";
+import { format } from "date-fns";
 import { onAuthStateChanged } from "firebase/auth";
 import {
   User,
@@ -239,7 +240,7 @@ export default function ProfilePage() {
           )}
 
           {/* Details Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
             <div className="p-4 rounded-xl bg-white/5 border border-white/10">
               <div className="flex items-center gap-2 text-xs text-slate-400 mb-2">
                 <Mail className="w-3.5 h-3.5" /> Email Address
@@ -252,14 +253,14 @@ export default function ProfilePage() {
               </div>
               <p className="text-sm font-medium text-white capitalize">{userData?.role || "Member"}</p>
             </div>
-            <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+            {/* <div className="p-4 rounded-xl bg-white/5 border border-white/10">
               <div className="flex items-center gap-2 text-xs text-slate-400 mb-2">
                 <BadgeCheck className="w-3.5 h-3.5" /> Verification Status
               </div>
               <p className={`text-sm font-medium ${userData?.emailVerified ? "text-emerald-400" : "text-amber-400"}`}>
                 {userData?.emailVerified ? "Verified" : "Pending Verification"}
               </p>
-            </div>
+            </div> */}
             <div className="p-4 rounded-xl bg-white/5 border border-white/10">
               <div className="flex items-center gap-2 text-xs text-slate-400 mb-2">
                 <CalendarDays className="w-3.5 h-3.5" /> Member Since
@@ -270,14 +271,14 @@ export default function ProfilePage() {
               <div className="flex items-center gap-2 text-xs text-slate-400 mb-2">
                 <Clock className="w-3.5 h-3.5" /> Last Login
               </div>
-              <p className="text-sm font-medium text-white">{formatDate(userData?.lastLoginAt || "")}</p>
+              <p className="text-sm font-medium text-white">{userData?.lastLoginAt && !isNaN(new Date(userData.lastLoginAt).getTime()) ? format(new Date(userData.lastLoginAt), "PPP p") : "N/A"}</p>
             </div>
-            <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+            {/* <div className="p-4 rounded-xl bg-white/5 border border-white/10">
               <div className="flex items-center gap-2 text-xs text-slate-400 mb-2">
                 <User className="w-3.5 h-3.5" /> User ID
               </div>
               <p className="text-sm font-medium text-white font-mono text-xs truncate">{userData?.uid}</p>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

@@ -22,9 +22,9 @@ import {
 const NAV_ITEMS = [
   { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
   { label: "Profile", href: "/dashboard/profile", icon: User },
-  { label: "Events", href: "/dashboard/events", icon: CalendarDays },
+  { label: "Events", href: "/dashboard/events", icon: CalendarDays, accessed },
   { label: "Achievements", href: "/dashboard/achievements", icon: Award },
-  { label: "Settings", href: "/dashboard/settings", icon: Settings },
+  // { label: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
 
 export default function DashboardLayout({
@@ -266,9 +266,8 @@ export default function DashboardLayout({
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 bottom-0 w-72 bg-slate-950/95 border-r border-white/10 z-50 transition-transform duration-300 lg:translate-x-0 ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed top-0 left-0 bottom-0 w-72 bg-slate-950/95 border-r border-white/10 z-50 transition-transform duration-300 lg:translate-x-0 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         {/* Logo */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-white/10">
@@ -306,11 +305,10 @@ export default function DashboardLayout({
                 key={item.href}
                 href={item.href}
                 onClick={() => setIsSidebarOpen(false)}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
-                  isActive
-                    ? "bg-gradient-to-r from-[#00f2fe]/20 to-[#4facfe]/10 text-[#00f2fe] border border-[#00f2fe]/30"
-                    : "text-slate-400 hover:text-white hover:bg-white/5 border border-transparent"
-                }`}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${isActive
+                  ? "bg-gradient-to-r from-[#00f2fe]/20 to-[#4facfe]/10 text-[#00f2fe] border border-[#00f2fe]/30"
+                  : "text-slate-400 hover:text-white hover:bg-white/5 border border-transparent"
+                  }`}
               >
                 <Icon className="w-5 h-5 shrink-0" />
                 <span className="flex-1">{item.label}</span>

@@ -126,7 +126,7 @@ async function pushQuestions(opts: Partial<PushOpts> = {}): Promise<void> {
 
 const isFresh = true
 
-pushQuestions({ fresh: isFresh, quizId: "GtgXvB2C8HRnaheUiObP" }).catch((err: unknown) => {
+pushQuestions({ fresh: isFresh, quizId: "MiokUAQgp4YHIkdFJUkg" }).catch((err: unknown) => {
   console.error("Script failed with error:", err);
   process.exit(1);
 });

@@ -29,20 +29,10 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 
-interface Event {
-  id: string;
-  title: string;
-  date: string;
-  startTime: string;
-  endTime: string;
-  location?: string;
-  description?: string;
-  category: string;
-  status: "upcoming" | "completed";
-  hasQuiz: boolean;
+import { Event as DbEvent } from "@/lib/firebase/db";
+
+interface Event extends DbEvent {
   registered: boolean;
-  link?: string;
-  quizId?: string;
 }
 
 const CATEGORIES = ["All", "Workshop", "Quiz"];
@@ -526,7 +516,7 @@ export default function EventsPage() {
                   </div>
 
                   {/* Card Footer */}
-                  <div className="px-6 py-4 border-t border-white/5">
+                  <div className="px-6 py-4 border-t border-white/5 flex flex-col gap-3">
                     {isQuiz && isAdmin ? (
                       <div className="flex gap-2 w-full">
                         <Link
@@ -612,6 +602,16 @@ export default function EventsPage() {
                           Event Completed
                         </div>
                       )
+                    )}
+
+                    {/* Admin only: Registered Users review navigation */}
+                    {isAdmin && (
+                      <Link
+                        href={`/dashboard/registered-users?eventId=${event.id}`}
+                        className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-white/10 bg-slate-950 text-slate-300 text-xs font-bold hover:bg-white/5 hover:text-white transition-all text-center"
+                      >
+                        Registered Users <ArrowUpRight className="w-3.5 h-3.5" />
+                      </Link>
                     )}
                   </div>
                 </div>
