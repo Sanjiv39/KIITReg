@@ -10,6 +10,7 @@ import {
   signOut,
   signInWithPopup,
   signInWithRedirect,
+  getRedirectResult,
   type User as FirebaseUser,
 } from "firebase/auth";
 import {
@@ -89,49 +90,34 @@ export default function DashboardLayout({
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        // Check if we just returned from a redirect-based sign-in fallback.
-        // onAuthStateChanged reliably fires when the user returns from Google,
-        // so we use a sessionStorage flag to detect that flow and sync the
-        // user with the backend (which also creates the DB record).
-        const isRedirectReturn =
-          typeof window !== "undefined" &&
-          window.sessionStorage.getItem("kdevs_redirect_signin") === "true";
+        // Initial fallback state
+        setUser({
+          displayName: firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "Member",
+          email: firebaseUser.email || "",
+          photoURL: firebaseUser.photoURL || "",
+        });
 
-        if (isRedirectReturn) {
-          window.sessionStorage.removeItem("kdevs_redirect_signin");
-          setIsRedirecting(false);
-          await syncUserWithBackend(firebaseUser);
-        } else {
-          // Normal authenticated session
-          // Initial fallback state
-          setUser({
-            displayName: firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "Member",
-            email: firebaseUser.email || "",
-            photoURL: firebaseUser.photoURL || "",
+        try {
+          const idToken = await firebaseUser.getIdToken();
+          const response = await fetch("/api/users/me", {
+            headers: {
+              Authorization: `Bearer ${idToken}`,
+            },
           });
 
-          try {
-            const idToken = await firebaseUser.getIdToken();
-            const response = await fetch("/api/users/me", {
-              headers: {
-                Authorization: `Bearer ${idToken}`,
-              },
-            });
-
-            if (response.ok) {
-              const data = await response.json();
-              if (data.success && data.user) {
-                setUser({
-                  displayName: data.user.displayName || data.user.name || firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "Member",
-                  email: data.user.email || firebaseUser.email || "",
-                  photoURL: data.user.photoURL || firebaseUser.photoURL || "",
-                  role: data.user.role,
-                });
-              }
+          if (response.ok) {
+            const data = await response.json();
+            if (data.success && data.user) {
+              setUser({
+                displayName: data.user.displayName || data.user.name || firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "Member",
+                email: data.user.email || firebaseUser.email || "",
+                photoURL: data.user.photoURL || firebaseUser.photoURL || "",
+                role: data.user.role,
+              });
             }
-          } catch (err) {
-            console.error("Failed to load user profile:", err);
           }
+        } catch (err) {
+          console.error("Failed to load user profile:", err);
         }
       } else {
         setUser(null);
@@ -140,6 +126,25 @@ export default function DashboardLayout({
     });
 
     return () => unsubscribe();
+  }, []);
+
+  // Resolve redirect-based sign-in result on app startup (canonical Firebase flow).
+  // When the user returns from the Google redirect page, getRedirectResult
+  // retrieves the saved token exchange result and returns the signed-in user.
+  useEffect(() => {
+    getRedirectResult(auth)
+      .then(async (result) => {
+        if (result?.user) {
+          // Came back from redirect-based sign-in fallback
+          setIsRedirecting(false);
+          await syncUserWithBackend(result.user);
+        }
+      })
+      .catch((error) => {
+        console.error("Redirect sign-in error:", error);
+        setAuthError(getAuthErrorMessage(error));
+        setIsRedirecting(false);
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -239,13 +244,9 @@ export default function DashboardLayout({
             : "Popup was blocked by your browser. Redirecting to Google sign-in..."
         );
         try {
-          // Set a flag so onAuthStateChanged knows to sync the user with the
-          // backend when they return from the Google redirect page.
-          if (typeof window !== "undefined") {
-            window.sessionStorage.setItem("kdevs_redirect_signin", "true");
-          }
           await signInWithRedirect(auth, googleProvider);
-          // Page will redirect to Google; onAuthStateChanged handles the return
+          // Page will redirect to Google; getRedirectResult resolves the
+          // result on app startup when the user returns.
         } catch (redirectError) {
           console.error("Redirect sign-in error:", redirectError);
           setAuthError(getAuthErrorMessage(redirectError));
