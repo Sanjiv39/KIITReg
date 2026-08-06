@@ -3,7 +3,9 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LayoutDashboard } from "lucide-react";
+import { auth } from "@/lib/firebase/config";
+import { onAuthStateChanged } from "firebase/auth";
 
 const NAV_ITEMS = [
   { label: "Home", href: "#home" },
@@ -17,6 +19,14 @@ export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setIsAuthenticated(!!user);
+    });
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -91,6 +101,15 @@ export function Navbar() {
                 </Link>
               );
             })}
+            {isAuthenticated && (
+              <Link
+                href="/dashboard"
+                className="flex items-center gap-2 px-5 py-2 text-sm font-medium rounded-full transition-all duration-200 text-[#00f2fe] border border-[#00f2fe]/30 hover:bg-[#00f2fe]/10"
+              >
+                <LayoutDashboard className="w-4 h-4" />
+                Dashboard
+              </Link>
+            )}
           </nav>
 
           {/* Mobile Hamburger Toggle */}
@@ -120,6 +139,16 @@ export function Navbar() {
                 {item.label}
               </Link>
             ))}
+            {isAuthenticated && (
+              <Link
+                href="/dashboard"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-2 px-4 py-2.5 text-base font-medium rounded-xl text-[#00f2fe] border border-[#00f2fe]/30 bg-[#00f2fe]/10"
+              >
+                <LayoutDashboard className="w-4 h-4" />
+                Dashboard
+              </Link>
+            )}
           </div>
         )}
       </div>
