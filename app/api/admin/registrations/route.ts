@@ -156,3 +156,5 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ success: false, error: `Server Error: ${errorDetails}` }, { status: 500 });
   }
 }
+
+export const runtime = "nodejs";
