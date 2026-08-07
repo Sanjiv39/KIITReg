@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // serverExternalPackages: ["firebase-admin", "jwks-rsa", "jose"],
   async rewrites() {
     return [
       {
