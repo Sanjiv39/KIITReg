@@ -1,15 +1,25 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { CheckCircle2, AlertTriangle, Star, Hourglass, Edit3, Clock, XCircle } from "lucide-react";
+import {
+  CheckCircle2,
+  AlertTriangle,
+  Star,
+  Hourglass,
+  Edit3,
+  Clock,
+  XCircle,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { auth } from "@/lib/firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
+import { useRouter } from "next/navigation";
 
 const REGISTRATION_CLOSE = new Date("July 01, 2026 23:59:59").getTime();
 
 export function Registration() {
+  const router = useRouter();
   const [timeLeft, setTimeLeft] = useState({
     days: "00",
     hours: "00",
@@ -58,7 +68,10 @@ export function Registration() {
   }, []);
 
   return (
-    <section id="registration" className="py-24 relative bg-slate-950/60 border-t border-white/5">
+    <section
+      id="registration"
+      className="py-24 relative bg-slate-950/60 border-t border-white/5"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
@@ -72,7 +85,9 @@ export function Registration() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           {/* Left Column: Process & Guidelines */}
           <div className="lg:col-span-7 space-y-6">
-            <h3 className="text-2xl font-bold text-white mb-4">Registration Process</h3>
+            <h3 className="text-2xl font-bold text-white mb-4">
+              Registration Process
+            </h3>
 
             <ul className="space-y-3">
               {[
@@ -82,7 +97,10 @@ export function Registration() {
                 "Receive confirmation within 48 hours",
                 "Attend orientation session",
               ].map((step, idx) => (
-                <li key={idx} className="flex items-center gap-3 text-slate-300 text-sm">
+                <li
+                  key={idx}
+                  className="flex items-center gap-3 text-slate-300 text-sm"
+                >
                   <CheckCircle2 className="w-5 h-5 text-[#00f2fe] shrink-0" />
                   <span>{step}</span>
                 </li>
@@ -96,7 +114,9 @@ export function Registration() {
                 <h4>Important Instructions</h4>
               </div>
               <p className="text-amber-200/90 leading-relaxed">
-                &quot;Please register ONLY using your official Email ID. Ensure all information is correct. Incorrect details may lead to rejection.&quot;
+                &quot;Please register ONLY using your official Email ID. Ensure
+                all information is correct. Incorrect details may lead to
+                rejection.&quot;
               </p>
             </div>
 
@@ -107,7 +127,8 @@ export function Registration() {
                 <h4>Membership Benefits</h4>
               </div>
               <p className="text-slate-300 leading-relaxed">
-                Access to all workshops, priority for hackathons, club merchandise, networking events, and official certification.
+                Access to all workshops, priority for hackathons, club
+                merchandise, networking events, and official certification.
               </p>
             </div>
           </div>
@@ -120,9 +141,12 @@ export function Registration() {
               </div>
 
               <div>
-                <h3 className="text-2xl font-bold text-white mb-2">Ready to Join?</h3>
+                <h3 className="text-2xl font-bold text-white mb-2">
+                  Ready to Join?
+                </h3>
                 <p className="text-slate-400 text-sm">
-                  Click the button below to register through our official Google Form. Remember to use your official KIIT email address.
+                  Click the button below to register through our official Google
+                  Form. Remember to use your official KIIT email address.
                 </p>
               </div>
 
@@ -138,43 +162,79 @@ export function Registration() {
 
                     <div className="flex items-center justify-center gap-3 text-white">
                       <div className="text-center">
-                        <div className="text-2xl font-bold font-mono text-[#00f2fe]">{timeLeft.days}</div>
-                        <div className="text-[10px] uppercase tracking-wider text-slate-400">Days</div>
+                        <div className="text-2xl font-bold font-mono text-[#00f2fe]">
+                          {timeLeft.days}
+                        </div>
+                        <div className="text-[10px] uppercase tracking-wider text-slate-400">
+                          Days
+                        </div>
                       </div>
-                      <span className="text-xl font-bold text-slate-600">:</span>
+                      <span className="text-xl font-bold text-slate-600">
+                        :
+                      </span>
                       <div className="text-center">
-                        <div className="text-2xl font-bold font-mono text-[#00f2fe]">{timeLeft.hours}</div>
-                        <div className="text-[10px] uppercase tracking-wider text-slate-400">Hours</div>
+                        <div className="text-2xl font-bold font-mono text-[#00f2fe]">
+                          {timeLeft.hours}
+                        </div>
+                        <div className="text-[10px] uppercase tracking-wider text-slate-400">
+                          Hours
+                        </div>
                       </div>
-                      <span className="text-xl font-bold text-slate-600">:</span>
+                      <span className="text-xl font-bold text-slate-600">
+                        :
+                      </span>
                       <div className="text-center">
-                        <div className="text-2xl font-bold font-mono text-[#00f2fe]">{timeLeft.mins}</div>
-                        <div className="text-[10px] uppercase tracking-wider text-slate-400">Mins</div>
+                        <div className="text-2xl font-bold font-mono text-[#00f2fe]">
+                          {timeLeft.mins}
+                        </div>
+                        <div className="text-[10px] uppercase tracking-wider text-slate-400">
+                          Mins
+                        </div>
                       </div>
-                      <span className="text-xl font-bold text-slate-600">:</span>
+                      <span className="text-xl font-bold text-slate-600">
+                        :
+                      </span>
                       <div className="text-center">
-                        <div className="text-2xl font-bold font-mono text-[#00f2fe]">{timeLeft.secs}</div>
-                        <div className="text-[10px] uppercase tracking-wider text-slate-400">Secs</div>
+                        <div className="text-2xl font-bold font-mono text-[#00f2fe]">
+                          {timeLeft.secs}
+                        </div>
+                        <div className="text-[10px] uppercase tracking-wider text-slate-400">
+                          Secs
+                        </div>
                       </div>
                     </div>
                   </div>
 
                   {/* Register Button */}
-                  <Button asChild size="lg" className="w-full text-base font-bold gap-2 py-3.5">
-                    <a href="https://forms.gle/mfDjfJX7bUUpaCKn8" target="_blank" rel="noreferrer">
+                  <Button
+                    asChild
+                    size="lg"
+                    className="w-full text-base font-bold gap-2 py-3.5"
+                  >
+                    <a
+                      href="https://forms.gle/mfDjfJX7bUUpaCKn8"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                       <Edit3 className="w-4 h-4" /> Register Now
                     </a>
                   </Button>
 
                   {/* Dashboard / Login Button */}
-                  <Button asChild variant="secondary" size="lg" className="w-full text-base font-semibold py-3.5">
+                  <Button
+                    asChild
+                    variant="secondary"
+                    size="lg"
+                    className="w-full text-base font-semibold py-3.5"
+                  >
                     <Link href="/dashboard">
                       {isAuthenticated ? "Go to Dashboard" : "Login / Sign Up"}
                     </Link>
                   </Button>
 
                   <p className="text-xs text-amber-400 flex items-center justify-center gap-1.5">
-                    <AlertTriangle className="w-3.5 h-3.5" /> Use your official KIIT Email ID only
+                    <AlertTriangle className="w-3.5 h-3.5" /> Use your official
+                    KIIT Email ID only
                   </p>
                 </div>
               ) : (
@@ -189,18 +249,28 @@ export function Registration() {
                       <span>Late Entry / Queries</span>
                     </div>
                     <p>
-                      If anyone still wishes to register at this moment, please fill out the form available in the Contact & Support section below.
+                      If anyone still wishes to register at this moment, please
+                      fill out the form available in the Contact & Support
+                      section below.
                     </p>
                     <p>
-                      We sincerely thank everyone who has already completed their registration. A confirmation email with further details will be sent to you soon.
+                      We sincerely thank everyone who has already completed
+                      their registration. A confirmation email with further
+                      details will be sent to you soon.
                     </p>
                   </div>
 
                   {/* Dashboard / Login Button */}
-                  <Button asChild variant="secondary" size="lg" className="w-full text-base font-semibold py-3.5">
-                    <Link href="/dashboard">
-                      {isAuthenticated ? "Go to Dashboard" : "Login / Sign Up"}
-                    </Link>
+                  <Button
+                    asChild
+                    variant="secondary"
+                    size="lg"
+                    className="w-full text-base font-semibold py-3.5"
+                    onClick={() => router.push("/dashboard")}
+                  >
+                    {/* <Link href="/dashboard"> */}
+                    {isAuthenticated ? "Go to Dashboard" : "Login / Sign Up"}
+                    {/* </Link> */}
                   </Button>
                 </div>
               )}

@@ -1,6 +1,12 @@
 import { NextResponse, NextRequest } from "next/server";
 import { adminAuth } from "@/lib/firebase/admin";
-import { getUser, getQuestions, addQuestion, updateQuestion, deleteQuestion } from "@/lib/firebase/db";
+import {
+  getUser,
+  getQuestions,
+  addQuestion,
+  updateQuestion,
+  deleteQuestion,
+} from "@/lib/firebase/db";
 
 // Helper: Verify if the request is made by an ADMIN
 async function verifyAdmin(request: NextRequest): Promise<string | null> {
@@ -28,7 +34,10 @@ export async function GET(request: NextRequest) {
   try {
     const isAdmin = await verifyAdmin(request);
     if (!isAdmin) {
-      return NextResponse.json({ success: false, error: "Unauthorized access" }, { status: 403 });
+      return NextResponse.json(
+        { success: false, error: "Unauthorized access" },
+        { status: 403 },
+      );
     }
 
     const { searchParams } = new URL(request.url);
@@ -37,8 +46,12 @@ export async function GET(request: NextRequest) {
     const questions = await getQuestions(quizId);
     return NextResponse.json({ success: true, questions });
   } catch (error: unknown) {
-    const errorDetails = error instanceof Error ? error.message : "Server error";
-    return NextResponse.json({ success: false, error: errorDetails }, { status: 500 });
+    const errorDetails =
+      error instanceof Error ? error.message : "Server error";
+    return NextResponse.json(
+      { success: false, error: errorDetails },
+      { status: 500 },
+    );
   }
 }
 
@@ -47,14 +60,25 @@ export async function POST(request: NextRequest) {
   try {
     const isAdmin = await verifyAdmin(request);
     if (!isAdmin) {
-      return NextResponse.json({ success: false, error: "Unauthorized access" }, { status: 403 });
+      return NextResponse.json(
+        { success: false, error: "Unauthorized access" },
+        { status: 403 },
+      );
     }
 
     const body = await request.json().catch(() => ({}));
     const { text, options, correct_answer, quizId } = body;
 
-    if (!text || !Array.isArray(options) || options.length !== 4 || typeof correct_answer !== "number") {
-      return NextResponse.json({ success: false, error: "Invalid question structure" }, { status: 400 });
+    if (
+      !text ||
+      !Array.isArray(options) ||
+      options.length !== 4 ||
+      typeof correct_answer !== "number"
+    ) {
+      return NextResponse.json(
+        { success: false, error: "Invalid question structure" },
+        { status: 400 },
+      );
     }
 
     const newQuestion = await addQuestion({
@@ -64,10 +88,17 @@ export async function POST(request: NextRequest) {
       quizId,
     });
 
-    return NextResponse.json({ success: true, question: newQuestion }, { status: 201 });
+    return NextResponse.json(
+      { success: true, question: newQuestion },
+      { status: 201 },
+    );
   } catch (error: unknown) {
-    const errorDetails = error instanceof Error ? error.message : "Server error";
-    return NextResponse.json({ success: false, error: errorDetails }, { status: 500 });
+    const errorDetails =
+      error instanceof Error ? error.message : "Server error";
+    return NextResponse.json(
+      { success: false, error: errorDetails },
+      { status: 500 },
+    );
   }
 }
 
@@ -76,14 +107,26 @@ export async function PUT(request: NextRequest) {
   try {
     const isAdmin = await verifyAdmin(request);
     if (!isAdmin) {
-      return NextResponse.json({ success: false, error: "Unauthorized access" }, { status: 403 });
+      return NextResponse.json(
+        { success: false, error: "Unauthorized access" },
+        { status: 403 },
+      );
     }
 
     const body = await request.json().catch(() => ({}));
     const { id, text, options, correct_answer, quizId } = body;
 
-    if (!id || !text || !Array.isArray(options) || options.length !== 4 || typeof correct_answer !== "number") {
-      return NextResponse.json({ success: false, error: "Invalid question update parameters" }, { status: 400 });
+    if (
+      !id ||
+      !text ||
+      !Array.isArray(options) ||
+      options.length !== 4 ||
+      typeof correct_answer !== "number"
+    ) {
+      return NextResponse.json(
+        { success: false, error: "Invalid question update parameters" },
+        { status: 400 },
+      );
     }
 
     await updateQuestion(id, {
@@ -95,8 +138,12 @@ export async function PUT(request: NextRequest) {
 
     return NextResponse.json({ success: true });
   } catch (error: unknown) {
-    const errorDetails = error instanceof Error ? error.message : "Server error";
-    return NextResponse.json({ success: false, error: errorDetails }, { status: 500 });
+    const errorDetails =
+      error instanceof Error ? error.message : "Server error";
+    return NextResponse.json(
+      { success: false, error: errorDetails },
+      { status: 500 },
+    );
   }
 }
 
@@ -105,20 +152,30 @@ export async function DELETE(request: NextRequest) {
   try {
     const isAdmin = await verifyAdmin(request);
     if (!isAdmin) {
-      return NextResponse.json({ success: false, error: "Unauthorized access" }, { status: 403 });
+      return NextResponse.json(
+        { success: false, error: "Unauthorized access" },
+        { status: 403 },
+      );
     }
 
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
 
     if (!id) {
-      return NextResponse.json({ success: false, error: "Missing question ID parameter" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "Missing question ID parameter" },
+        { status: 400 },
+      );
     }
 
     await deleteQuestion(id);
     return NextResponse.json({ success: true });
   } catch (error: unknown) {
-    const errorDetails = error instanceof Error ? error.message : "Server error";
-    return NextResponse.json({ success: false, error: errorDetails }, { status: 500 });
+    const errorDetails =
+      error instanceof Error ? error.message : "Server error";
+    return NextResponse.json(
+      { success: false, error: errorDetails },
+      { status: 500 },
+    );
   }
 }
