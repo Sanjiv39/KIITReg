@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  serverExternalPackages: [],
+  serverExternalPackages: ["firebase-admin"],
   async rewrites() {
     return [
       {
