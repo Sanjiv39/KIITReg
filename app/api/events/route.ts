@@ -199,3 +199,5 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ success: false, error: errorDetails }, { status: 500 });
   }
 }
+
+export const runtime = "nodejs";
