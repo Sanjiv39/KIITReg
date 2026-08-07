@@ -51,7 +51,11 @@ export default function DashboardLayout({
         return path.startsWith(item.href);
       });
       if (matched) return matched.href;
-      if (path.startsWith("/dashboard/quiz") || path.startsWith("/dashboard/results") || path.startsWith("/dashboard/registered-users")) {
+      if (
+        path.startsWith("/dashboard/quiz") ||
+        path.startsWith("/dashboard/results") ||
+        path.startsWith("/dashboard/registered-users")
+      ) {
         return "/dashboard/events";
       }
     }
@@ -75,7 +79,11 @@ export default function DashboardLayout({
     if (matched) {
       setActiveTab(matched.href);
     } else {
-      if (pathname.startsWith("/dashboard/quiz") || pathname.startsWith("/dashboard/results") || pathname.startsWith("/dashboard/registered-users")) {
+      if (
+        pathname.startsWith("/dashboard/quiz") ||
+        pathname.startsWith("/dashboard/results") ||
+        pathname.startsWith("/dashboard/registered-users")
+      ) {
         setActiveTab("/dashboard/events");
       }
     }
@@ -89,10 +97,14 @@ export default function DashboardLayout({
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      console.log("AUTH State changed :", firebaseUser);
       if (firebaseUser) {
         // Initial fallback state
         setUser({
-          displayName: firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "Member",
+          displayName:
+            firebaseUser.displayName ||
+            firebaseUser.email?.split("@")[0] ||
+            "Member",
           email: firebaseUser.email || "",
           photoURL: firebaseUser.photoURL || "",
         });
@@ -109,7 +121,12 @@ export default function DashboardLayout({
             const data = await response.json();
             if (data.success && data.user) {
               setUser({
-                displayName: data.user.displayName || data.user.name || firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "Member",
+                displayName:
+                  data.user.displayName ||
+                  data.user.name ||
+                  firebaseUser.displayName ||
+                  firebaseUser.email?.split("@")[0] ||
+                  "Member",
                 email: data.user.email || firebaseUser.email || "",
                 photoURL: data.user.photoURL || firebaseUser.photoURL || "",
                 role: data.user.role,
@@ -134,6 +151,7 @@ export default function DashboardLayout({
   useEffect(() => {
     getRedirectResult(auth)
       .then(async (result) => {
+        console.log("Got redirect result :", result);
         if (result?.user) {
           // Came back from redirect-based sign-in fallback
           setIsRedirecting(false);
@@ -175,51 +193,60 @@ export default function DashboardLayout({
     return "Sign in failed";
   };
 
-  const syncUserWithBackend = useCallback(async (firebaseUser: FirebaseUser) => {
-    // Initial fallback state
-    setUser({
-      displayName: firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "Member",
-      email: firebaseUser.email || "",
-      photoURL: firebaseUser.photoURL || "",
-    });
-
-    try {
-      const idToken = await firebaseUser.getIdToken();
-      const authRes = await fetch("/api/users/auth", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${idToken}`,
-        },
-        body: JSON.stringify({
-          user: {
-            uid: firebaseUser.uid,
-            email: firebaseUser.email,
-            displayName: firebaseUser.displayName,
-            photoURL: firebaseUser.photoURL,
-            emailVerified: firebaseUser.emailVerified,
-          },
-        }),
-      });
-
-      let role = "USER";
-      if (authRes.ok) {
-        const authData = await authRes.json();
-        if (authData.success && authData.user) {
-          role = authData.user.role || "USER";
-        }
-      }
-
+  const syncUserWithBackend = useCallback(
+    async (firebaseUser: FirebaseUser) => {
+      // Initial fallback state
       setUser({
-        displayName: firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "Member",
+        displayName:
+          firebaseUser.displayName ||
+          firebaseUser.email?.split("@")[0] ||
+          "Member",
         email: firebaseUser.email || "",
         photoURL: firebaseUser.photoURL || "",
-        role: role,
       });
-    } catch (err) {
-      console.error("Failed to sync user with backend:", err);
-    }
-  }, []);
+
+      try {
+        const idToken = await firebaseUser.getIdToken();
+        const authRes = await fetch("/api/users/auth", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${idToken}`,
+          },
+          body: JSON.stringify({
+            user: {
+              uid: firebaseUser.uid,
+              email: firebaseUser.email,
+              displayName: firebaseUser.displayName,
+              photoURL: firebaseUser.photoURL,
+              emailVerified: firebaseUser.emailVerified,
+            },
+          }),
+        });
+
+        let role = "USER";
+        if (authRes.ok) {
+          const authData = await authRes.json();
+          if (authData.success && authData.user) {
+            role = authData.user.role || "USER";
+          }
+        }
+
+        setUser({
+          displayName:
+            firebaseUser.displayName ||
+            firebaseUser.email?.split("@")[0] ||
+            "Member",
+          email: firebaseUser.email || "",
+          photoURL: firebaseUser.photoURL || "",
+          role: role,
+        });
+      } catch (err) {
+        console.error("Failed to sync user with backend:", err);
+      }
+    },
+    [],
+  );
 
   const handleGoogleSignIn = async () => {
     setIsSigningIn(true);
@@ -241,7 +268,7 @@ export default function DashboardLayout({
         setAuthError(
           code === "auth/unauthorized-domain"
             ? "This domain is not authorized for popup sign-in. Redirecting to Google sign-in..."
-            : "Popup was blocked by your browser. Redirecting to Google sign-in..."
+            : "Popup was blocked by your browser. Redirecting to Google sign-in...",
         );
         try {
           await signInWithRedirect(auth, googleProvider);
@@ -274,7 +301,9 @@ export default function DashboardLayout({
       <div className="min-h-screen bg-[#0b0f19] flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 rounded-full border-2 border-[#00f2fe]/30 border-t-[#00f2fe] animate-spin" />
-          <p className="text-slate-400 text-sm font-medium">Loading dashboard...</p>
+          <p className="text-slate-400 text-sm font-medium">
+            Loading dashboard...
+          </p>
         </div>
       </div>
     );
@@ -296,7 +325,10 @@ export default function DashboardLayout({
               />
             </div>
             <h1 className="text-xl font-bold tracking-tight text-white">
-              K<span className="text-[#00f2fe] font-extrabold">&#123;devs&#125;</span>
+              K
+              <span className="text-[#00f2fe] font-extrabold">
+                &#123;devs&#125;
+              </span>
             </h1>
           </Link>
           <Link
@@ -349,7 +381,9 @@ export default function DashboardLayout({
                 {isSigningIn || isRedirecting ? (
                   <>
                     <div className="w-5 h-5 rounded-full border-2 border-slate-900/30 border-t-slate-900 animate-spin" />
-                    {isRedirecting ? "Redirecting to Google..." : "Signing in..."}
+                    {isRedirecting
+                      ? "Redirecting to Google..."
+                      : "Signing in..."}
                   </>
                 ) : (
                   <>
@@ -399,8 +433,9 @@ export default function DashboardLayout({
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 bottom-0 w-72 bg-slate-950/95 border-r border-white/10 z-50 transition-transform duration-300 lg:translate-x-0 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+        className={`fixed top-0 left-0 bottom-0 w-72 bg-slate-950/95 border-r border-white/10 z-50 transition-transform duration-300 lg:translate-x-0 ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
       >
         {/* Logo */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-white/10">
@@ -414,7 +449,10 @@ export default function DashboardLayout({
               />
             </div>
             <h1 className="text-xl font-bold tracking-tight text-white">
-              K<span className="text-[#00f2fe] font-extrabold">&#123;devs&#125;</span>
+              K
+              <span className="text-[#00f2fe] font-extrabold">
+                &#123;devs&#125;
+              </span>
             </h1>
           </Link>
           <button
@@ -436,10 +474,11 @@ export default function DashboardLayout({
                 key={item.href}
                 href={item.href}
                 onClick={() => setIsSidebarOpen(false)}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${isActive
-                  ? "bg-gradient-to-r from-[#00f2fe]/20 to-[#4facfe]/10 text-[#00f2fe] border border-[#00f2fe]/30"
-                  : "text-slate-400 hover:text-white hover:bg-white/5 border border-transparent"
-                  }`}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                  isActive
+                    ? "bg-gradient-to-r from-[#00f2fe]/20 to-[#4facfe]/10 text-[#00f2fe] border border-[#00f2fe]/30"
+                    : "text-slate-400 hover:text-white hover:bg-white/5 border border-transparent"
+                }`}
               >
                 <Icon className="w-5 h-5 shrink-0" />
                 <span className="flex-1">{item.label}</span>
@@ -504,7 +543,9 @@ export default function DashboardLayout({
             <h2 className="text-lg font-bold text-white">
               {user?.role === "ADMIN" ? "Admin Dashboard" : "Member Dashboard"}
             </h2>
-            <p className="text-xs text-slate-400">Welcome back, {user?.displayName}</p>
+            <p className="text-xs text-slate-400">
+              Welcome back, {user?.displayName}
+            </p>
           </div>
 
           <div className="flex items-center gap-3">
